@@ -104,6 +104,19 @@ When multiple skills could apply, use this order:
 "Let's build X" → brainstorming first, then implementation skills.
 "Fix this bug" → debugging first, then domain-specific skills.
 
+<!-- ENHANCED: added-enhanced-workflow-ref -->
+## Enhanced Workflow
+
+This fork includes enhanced skills that add documentation at every phase. Check for these skills:
+
+- **`using-enhanced-workflow`** — Master flow reference with complete phase map
+- **`init-enhanced-workflow`** — One-time project setup (run once per project)
+- **`decomposing-requirements`** — Break large requirements before brainstorming
+- **`documenting-*`** — Record execution, verification, debugging, review, and completion
+
+If this project has `docs/superpowers/` directory, the enhanced workflow is active. Follow `using-enhanced-workflow` for the complete flow.
+<!-- /ENHANCED: added-enhanced-workflow-ref -->
+
 ## Skill Types
 
 **Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.

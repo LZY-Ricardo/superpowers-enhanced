@@ -104,3 +104,26 @@ Before proposing changes to skill design, workflow philosophy, or architecture, 
 - One problem per PR
 - Test on at least one harness and report results in the environment table
 - Describe the problem you solved, not just what you changed
+
+---
+
+## Enhanced Workflow Skills
+
+This fork adds documentation and requirement decomposition skills on top of the core Superpowers workflow. These skills ensure every development phase produces persistent documentation.
+
+### Enhanced Skills (8 new)
+
+| Skill | Purpose |
+|-------|---------|
+| `decomposing-requirements` | Break large requirements into sub-projects before brainstorming |
+| `init-enhanced-workflow` | One-time project setup: directory structure + CLAUDE.md + docs |
+| `using-enhanced-workflow` | Master flow reference: complete phase map and skill chaining |
+| `documenting-execution` | Record task execution status, deviations, and decisions |
+| `documenting-verification` | Record verification results (tests, build, lint) |
+| `documenting-debugging` | Record debugging sessions: symptom → root cause → fix |
+| `documenting-review` | Record code review findings and resolutions |
+| `documenting-completion` | Write final completion summary before merge/PR |
+
+### Original Skills (14 from upstream)
+
+brainstorming, dispatching-parallel-agents, executing-plans, finishing-a-development-branch, receiving-code-review, requesting-code-review, subagent-driven-development, systematic-debugging, test-driven-development, using-git-worktrees, using-superpowers, verification-before-completion, writing-plans, writing-skills

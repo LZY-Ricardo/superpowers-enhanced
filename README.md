@@ -1,3 +1,32 @@
+# Superpowers Enhanced / Superpowers 增强版
+
+> **This is an enhanced fork** of [obra/superpowers](https://github.com/obra/superpowers) with documentation persistence and requirement decomposition skills.
+>
+> **这是** [obra/superpowers](https://github.com/obra/superpowers) **的增强版 fork**，增加了文档沉淀和需求拆分能力。
+>
+> For detailed enhanced workflow documentation, see [ENHANCED.md](ENHANCED.md).
+>
+> 详细增强流程文档请参阅 [ENHANCED.md](ENHANCED.md)。
+
+**8 new enhanced skills / 8 个新增增强 skill：**
+
+| Skill | Purpose / 用途 |
+|-------|---------------|
+| `decomposing-requirements` | Break large requirements into sub-projects / 将大需求拆分为子项目 |
+| `init-enhanced-workflow` | One-time project setup / 一次性项目初始化 |
+| `using-enhanced-workflow` | Master flow reference / 总流程参考 |
+| `documenting-execution` | Record task progress / 记录任务执行进度 |
+| `documenting-verification` | Record verification results / 记录验证结果 |
+| `documenting-debugging` | Record debugging sessions / 记录调试过程 |
+| `documenting-review` | Record code review findings / 记录代码审查发现 |
+| `documenting-completion` | Write completion summary / 编写完成总结 |
+
+**All 14 original skills are preserved.** See [MAINTENANCE.md](MAINTENANCE.md) for development and maintenance guide.
+
+**保留了全部 14 个原始 skill。** 开发和维护指南请参阅 [MAINTENANCE.md](MAINTENANCE.md)。
+
+---
+
 # Superpowers
 
 Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.
