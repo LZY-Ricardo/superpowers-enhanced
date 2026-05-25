@@ -7,6 +7,10 @@ description: Use when executing implementation plans with independent tasks in t
 
 Execute plan by dispatching fresh subagent per task, with two-stage review after each: spec compliance review first, then code quality review.
 
+<!-- ENHANCED: reviewer-continuity-loop -->
+**Enhanced review loop:** When a reviewer finds issues, the implementer/fix subagent makes the changes, the main session runs verification, then re-review is requested. Prefer continuing with the original reviewer for that finding set; if that reviewer is unavailable or no longer has enough context even after a concise recap, fall back to a fresh reviewer. The re-review must explicitly check whether each prior finding is fixed, partially fixed, still broken, or replaced by a new issue.
+<!-- /ENHANCED: reviewer-continuity-loop -->
+
 **Why subagents:** You delegate tasks to specialized agents with isolated context. By precisely crafting their instructions and context, you ensure they stay focused and succeed at their task. They should never inherit your session's context or history — you construct exactly what they need. This also preserves your own context for coordination work.
 
 **Core principle:** Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration
@@ -54,9 +58,12 @@ digraph process {
         "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" [shape=box];
         "Spec reviewer subagent confirms code matches spec?" [shape=diamond];
         "Implementer subagent fixes spec gaps" [shape=box];
+        "Main session runs verification" [shape=box];
+        "Re-dispatch original spec reviewer if available; otherwise fresh reviewer" [shape=box];
         "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [shape=box];
         "Code quality reviewer subagent approves?" [shape=diamond];
         "Implementer subagent fixes quality issues" [shape=box];
+        "Re-dispatch original quality reviewer if available; otherwise fresh reviewer" [shape=box];
         "Mark task complete in TodoWrite" [shape=box];
     }
 
@@ -73,11 +80,15 @@ digraph process {
     "Implementer subagent implements, tests, commits, self-reviews" -> "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)";
     "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" -> "Spec reviewer subagent confirms code matches spec?";
     "Spec reviewer subagent confirms code matches spec?" -> "Implementer subagent fixes spec gaps" [label="no"];
-    "Implementer subagent fixes spec gaps" -> "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" [label="re-review"];
+    "Implementer subagent fixes spec gaps" -> "Main session runs verification" [label="fix"];
+    "Main session runs verification" -> "Re-dispatch original spec reviewer if available; otherwise fresh reviewer" [label="verified"];
+    "Re-dispatch original spec reviewer if available; otherwise fresh reviewer" -> "Spec reviewer subagent confirms code matches spec?" [label="re-review"];
     "Spec reviewer subagent confirms code matches spec?" -> "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [label="yes"];
     "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" -> "Code quality reviewer subagent approves?";
     "Code quality reviewer subagent approves?" -> "Implementer subagent fixes quality issues" [label="no"];
-    "Implementer subagent fixes quality issues" -> "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [label="re-review"];
+    "Implementer subagent fixes quality issues" -> "Main session runs verification" [label="fix"];
+    "Main session runs verification" -> "Re-dispatch original quality reviewer if available; otherwise fresh reviewer" [label="verified"];
+    "Re-dispatch original quality reviewer if available; otherwise fresh reviewer" -> "Code quality reviewer subagent approves?" [label="re-review"];
     "Code quality reviewer subagent approves?" -> "Mark task complete in TodoWrite" [label="yes"];
     "Mark task complete in TodoWrite" -> "More tasks remain?";
     "More tasks remain?" -> "Dispatch implementer subagent (./implementer-prompt.md)" [label="yes"];
@@ -178,8 +189,11 @@ Spec reviewer: ❌ Issues:
 [Implementer fixes issues]
 Implementer: Removed --json flag, added progress reporting
 
-[Spec reviewer reviews again]
-Spec reviewer: ✅ Spec compliant now
+[Main session runs verification]
+You: Tests pass, progress reporting verified
+
+[Original spec reviewer re-checks findings]
+Spec reviewer: ✅ Finding #1 fixed, Finding #2 fixed, no new spec issues
 
 [Dispatch code quality reviewer]
 Code reviewer: Strengths: Solid. Issues (Important): Magic number (100)
@@ -187,8 +201,11 @@ Code reviewer: Strengths: Solid. Issues (Important): Magic number (100)
 [Implementer fixes]
 Implementer: Extracted PROGRESS_INTERVAL constant
 
-[Code reviewer reviews again]
-Code reviewer: ✅ Approved
+[Main session runs verification]
+You: Tests still pass after constant extraction
+
+[Original code reviewer re-checks finding]
+Code reviewer: ✅ Finding #1 fixed, approved
 
 [Mark Task 2 complete]
 
@@ -256,7 +273,11 @@ Done!
 
 **If reviewer finds issues:**
 - Implementer (same subagent) fixes them
-- Reviewer reviews again
+- Main session runs verification before re-review
+- Prefer the original reviewer for the re-review
+- If the original reviewer is unavailable or still lacks context after a concise recap, dispatch a fresh reviewer
+- Re-review must classify each prior finding: VERIFIED_FIXED, PARTIALLY_FIXED, STILL_BROKEN, DEFERRED, or REJECTED
+- If re-review confirms old findings are fixed but discovers a new issue, record the old finding as fixed and the new issue as a new finding
 - Repeat until approved
 - Don't skip the re-review
 

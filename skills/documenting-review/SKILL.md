@@ -38,30 +38,47 @@ Use the same `<feature-name>` as the execution log. One file per feature. Append
 Spec compliance review and code quality review are **sequential, not parallel:**
 
 ```
-Implementer → Spec Review → (fix if needed) → Quality Review → (fix if needed) → Done
+Implementer → Spec Review → (fix if needed) → Verification → Re-check (prefer same reviewer) → Quality Review → (fix if needed) → Verification → Re-check (prefer same reviewer) → Done
 ```
 
 Record each as a separate review cycle in this log. Spec review must pass before quality review begins.
+
+For re-check cycles:
+- Prefer the original reviewer for the finding set
+- If the original reviewer is unavailable, or still lacks enough context after a concise recap, use a fresh reviewer
+- Re-check cycles must explicitly say which prior cycle they are closing or re-evaluating
 
 ## Log Entry Format
 
 ```markdown
 ### Review Cycle N — [Timestamp]
 
+**Cycle ID:** RC-N
 **Reviewer type:** SPEC_COMPLIANCE | CODE_QUALITY | PR_REVIEW | MANUAL
 **Reviewer:** subagent / external reviewer / human partner
 **Scope:** Task N [task name] / Full implementation
 **Preceded by:** *(if applicable)* Review Cycle N-1 (spec compliance passed)
+**Re-check of:** *(if applicable)* Review Cycle N-1
+**Original reviewer:** [reviewer who raised the finding set]
+**Re-check reviewer:** [same reviewer reused, fallback reviewer, or human partner]
 
 #### Findings
 
-| # | Severity | Description | Resolution | Commit | Cross-task? |
-|---|----------|-------------|------------|--------|-------------|
-| 1 | CRITICAL | [What was found] | FIXED | abc1234 | — |
-| 2 | IMPORTANT | [What was found] | FIXED | abc1234 | — |
-| 3 | IMPORTANT | [What was found] | DEFERRED | — | — |
-| 4 | MINOR | [What was found] | REJECTED | — | — |
-| 5 | IMPORTANT | [What was found] | FIXED | abc1234 | Also affects Task 3, 5 |
+| # | Severity | Description | Resolution | Re-check status | Commit | Cross-task? |
+|---|----------|-------------|------------|-----------------|--------|-------------|
+| 1 | CRITICAL | [What was found] | FIXED | VERIFIED_FIXED | abc1234 | — |
+| 2 | IMPORTANT | [What was found] | FIXED | PARTIALLY_FIXED | abc1234 | — |
+| 3 | IMPORTANT | [What was found] | DEFERRED | DEFERRED | — | — |
+| 4 | MINOR | [What was found] | REJECTED | REJECTED | — | — |
+| 5 | IMPORTANT | [What was found] | FIXED | VERIFIED_FIXED | abc1234 | Also affects Task 3, 5 |
+| 6 | IMPORTANT | [New issue found during re-check] | FIXED | NEW_FINDING | def5678 | — |
+
+#### Re-check Summary *(for re-check cycles)*
+
+- **Finding #1:** [Verified fixed / still broken / partially fixed]
+- **Finding #2:** [Verified fixed / still broken / partially fixed]
+- **Fallback reason:** *(if a fresh reviewer was used)* [original reviewer unavailable / lacked context]
+- **Verification evidence reviewed:** [tests/build/lint/manual check summary]
 
 #### Deferred Items *(for each deferred finding)*
 
@@ -75,6 +92,12 @@ Record each as a separate review cycle in this log. Spec review must pass before
 **Finding #4:** [Description]
 - **Reason:** [Why reviewer's suggestion was rejected]
 - **Evidence:** [Technical justification]
+
+#### New Findings During Re-check *(if any)*
+
+**Finding #6:** [Description]
+- **Status of prior finding:** [old finding fixed, but new issue introduced]
+- **Action:** [fixed immediately / deferred / new task]
 
 #### Related Debugging *(if any findings required debugging)*
 - Finding #2 → [link to debugging-log entry]
@@ -94,9 +117,21 @@ Record each as a separate review cycle in this log. Spec review must pass before
 
 | Resolution | Meaning |
 |------------|---------|
-| FIXED | Issue addressed, verified |
+| FIXED | Issue addressed and closed after review/verification |
 | DEFERRED | Legitimate issue, postponed with documented reason |
 | REJECTED | Reviewer's suggestion not applicable, with documented reason |
+
+## Re-check Status Definitions
+
+| Re-check status | Meaning |
+|-----------------|---------|
+| OPEN | Finding has not been re-checked yet |
+| VERIFIED_FIXED | Reviewer confirmed the original finding is fixed |
+| PARTIALLY_FIXED | Some part of the finding was addressed, but not enough to close it |
+| STILL_BROKEN | Reviewer confirmed the finding is still not fixed |
+| DEFERRED | Finding remains intentionally postponed |
+| REJECTED | Finding was reviewed and rejected with evidence |
+| NEW_FINDING | Re-check fixed the old issue but exposed a new issue that must be tracked separately |
 
 ## Cross-Task Findings
 
@@ -104,6 +139,15 @@ If a review finding affects multiple tasks (e.g., a shared utility has a bug):
 - Mark the finding with the tasks it affects in the "Cross-task?" column
 - Fix it in the current task if possible
 - If the fix needs to happen in another task, note it as DEFERRED with the target task as prerequisite
+- When the fix happens in a later task, the re-check cycle must link back to the original cycle and original finding number
+
+## Edge Cases
+
+- **Verification passed, review still fails:** keep the finding open or mark it STILL_BROKEN. Verification evidence is required, but it does not overrule reviewer judgment.
+- **One fix addresses multiple findings:** keep one row per finding. Multiple findings may point to the same commit.
+- **Re-check discovers a new issue:** close the old finding only if fixed, then create a new finding row in the re-check cycle.
+- **Same finding exceeds 5 fix/re-check rounds:** escalate to the human partner.
+- **Original reviewer still exists but lacks context:** give a concise recap with original finding text, fix summary, and verification results; only then fall back to a fresh reviewer.
 
 ## Key Principles
 

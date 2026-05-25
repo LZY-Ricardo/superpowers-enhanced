@@ -14,6 +14,7 @@ echo "This test verifies the document review system by:"
 echo "  1. Creating a spec with intentional errors"
 echo "  2. Running the spec document reviewer"
 echo "  3. Verifying the reviewer catches the errors"
+echo "  4. Verifying the documenting-review schema supports reviewer continuity"
 echo ""
 
 # Create test project
@@ -104,6 +105,7 @@ echo ""
 
 # Verification tests
 FAILED=0
+REVIEW_SKILL_FILE="$SCRIPT_DIR/../../skills/documenting-review/SKILL.md"
 
 echo "=== Verification Tests ==="
 echo ""
@@ -147,6 +149,21 @@ elif grep -qi "Approved\|✅" "$OUTPUT_FILE" && ! grep -qi "Issues Found\|❌" "
     FAILED=$((FAILED + 1))
 else
     echo "  [PASS] Reviewer identified problems (ambiguous format but found issues)"
+fi
+echo ""
+
+# Test 5: documenting-review schema includes reviewer continuity fields
+echo "Test 5: documenting-review schema..."
+if grep -qi "Cycle ID" "$REVIEW_SKILL_FILE" \
+   && grep -qi "Original reviewer" "$REVIEW_SKILL_FILE" \
+   && grep -qi "Re-check reviewer" "$REVIEW_SKILL_FILE" \
+   && grep -qi "Re-check status" "$REVIEW_SKILL_FILE" \
+   && grep -qi "PARTIALLY_FIXED" "$REVIEW_SKILL_FILE" \
+   && grep -qi "STILL_BROKEN" "$REVIEW_SKILL_FILE"; then
+    echo "  [PASS] documenting-review schema includes continuity and re-check states"
+else
+    echo "  [FAIL] documenting-review schema missing continuity fields or statuses"
+    FAILED=$((FAILED + 1))
 fi
 echo ""
 

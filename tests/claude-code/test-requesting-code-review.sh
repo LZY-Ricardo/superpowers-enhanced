@@ -16,6 +16,7 @@ echo "  1. Setting up a tiny project with a baseline commit"
 echo "  2. Adding a second commit that plants an obvious bug"
 echo "  3. Dispatching the code reviewer via the requesting-code-review skill"
 echo "  4. Verifying the reviewer flags the planted bug as Critical/Important"
+echo "  5. Verifying the skill text includes verification-before-rereview and reviewer continuity rules"
 echo ""
 
 TEST_PROJECT=$(create_test_project)
@@ -129,6 +130,8 @@ SESSION_FILE=$(ls -t "$SESSION_DIR"/*.jsonl 2>/dev/null | head -1 || true)
 
 FAILED=0
 
+SKILL_FILE="$PLUGIN_DIR/skills/requesting-code-review/SKILL.md"
+
 echo "=== Verification Tests ==="
 echo ""
 
@@ -188,6 +191,19 @@ if grep -qiE "ready to merge.*yes|approved.*for merge|^\s*yes\s*$|safe to merge"
     FAILED=$((FAILED + 1))
 else
     echo "  [PASS] Reviewer did not approve the diff"
+fi
+echo ""
+
+# Test 6: Skill text encodes verification-before-rereview and reviewer continuity
+
+echo "Test 6: Skill text encodes reviewer continuity..."
+if grep -qi "After fixes, run verification before re-review" "$SKILL_FILE" \
+   && grep -qi "Prefer re-check by the original reviewer" "$SKILL_FILE" \
+   && grep -qi "fresh reviewer" "$SKILL_FILE"; then
+    echo "  [PASS] Skill text includes verification-before-rereview and fallback reviewer rules"
+else
+    echo "  [FAIL] Skill text is missing reviewer continuity requirements"
+    FAILED=$((FAILED + 1))
 fi
 echo ""
 

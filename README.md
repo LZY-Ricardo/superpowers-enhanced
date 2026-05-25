@@ -8,14 +8,13 @@
 >
 > 详细增强流程文档请参阅 [ENHANCED.md](ENHANCED.md)。
 
-**9 new enhanced skills / 9 个新增增强 skill：**
+**8 new enhanced skills / 8 个新增增强 skill：**
 
 | Skill | Purpose / 用途 |
 |-------|---------------|
 | `decomposing-requirements` | Break large requirements into sub-projects / 将大需求拆分为子项目 |
 | `init-enhanced-workflow` | One-time project setup / 一次性项目初始化 |
 | `using-enhanced-workflow` | Master flow reference / 总流程参考 |
-| `installing-superpowers-enhanced` | Install/upgrade the enhanced plugin / 安装或升级增强版插件 |
 | `documenting-execution` | Record task progress / 记录任务执行进度 |
 | `documenting-verification` | Record verification results / 记录验证结果 |
 | `documenting-debugging` | Record debugging sessions / 记录调试过程 |
@@ -44,7 +43,7 @@ Once it's teased a spec out of the conversation, it shows it to you in chunks sh
 
 After you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. 
 
-Next up, once you say "go", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for Claude to be able to work autonomously for a couple hours at a time without deviating from the plan you put together.
+Next up, once you say "go", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. In this enhanced fork, review loops are reviewer-aware: after a fix, the main session verifies the change and prefers the original reviewer for re-checks before falling back to a fresh reviewer. It's not uncommon for Claude to be able to work autonomously for a couple hours at a time without deviating from the plan you put together.
 
 There's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.
 

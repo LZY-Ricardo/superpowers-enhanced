@@ -23,6 +23,18 @@ Dispatch a code reviewer subagent to catch issues before they cascade. The revie
 
 ## How to Request
 
+<!-- ENHANCED: reviewer-continuity-rules -->
+## Reviewer Continuity
+
+On the first review cycle, record enough reviewer identity to attempt a targeted re-check later (for example: `spec-reviewer subagent #1`, `code-quality reviewer #2`). When a fix is ready:
+- Main session runs verification first
+- Prefer returning to the original reviewer with the original findings, fix summary, and verification evidence
+- If the original reviewer is unavailable, or still cannot validate the fix after a concise recap, dispatch a fresh reviewer
+- Fresh reviewers must check both: whether prior findings are truly fixed, and whether the fix introduced regressions or new issues
+
+Reviewer continuity is preferred, not magical. If the runtime cannot continue the same reviewer instance, the fallback reviewer must be told that it is performing a re-check of prior findings, not a blind first-pass review.
+<!-- /ENHANCED: reviewer-continuity-rules -->
+
 **1. Get git SHAs:**
 ```bash
 BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
@@ -44,6 +56,8 @@ Use Task tool with `general-purpose` type, fill template at `code-reviewer.md`
 - Fix Important issues before proceeding
 - Note Minor issues for later
 - Push back if reviewer is wrong (with reasoning)
+- After fixes, run verification before re-review
+- Prefer re-check by the original reviewer; if unavailable, use a fresh reviewer with the prior findings and verification evidence
 
 ## Example
 
@@ -66,10 +80,12 @@ HEAD_SHA=$(git rev-parse HEAD)
   Issues:
     Important: Missing progress indicators
     Minor: Magic number (100) for reporting interval
-  Assessment: Ready to proceed
+  Assessment: Not ready to proceed until issues are addressed
 
 You: [Fix progress indicators]
-[Continue to Task 3]
+[Run verification]
+[Ask the same reviewer to re-check the prior findings; if unavailable, dispatch a fresh reviewer with the old findings + verification evidence]
+[Continue to Task 3 only after re-review closes the open findings]
 ```
 
 ## Integration with Workflows
@@ -78,6 +94,8 @@ You: [Fix progress indicators]
 - Review after EACH task
 - Catch issues before they compound
 - Fix before moving to next task
+- Verification happens before re-review
+- Re-review prefers the original reviewer and falls back to a fresh reviewer only when needed
 
 **Executing Plans:**
 - Review after each task or at natural checkpoints

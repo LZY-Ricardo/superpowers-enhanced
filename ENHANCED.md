@@ -14,7 +14,7 @@ The original Superpowers workflow has a gap: review findings, debugging sessions
 
 | Problem / 问题 | Solution / 解决方案 |
 |-------|---------------|
-| Review findings vanish after session / 审查发现在会话后消失 | `documenting-review` records all findings with resolution status |
+| Review findings vanish after session / 审查发现在会话后消失 | `documenting-review` records all findings, re-check cycles, and reviewer continuity |
 | Execution progress is untracked / 执行进度无追踪 | `documenting-execution` logs each task with status and deviations |
 | Large requirements have no decomposition step / 大需求没有拆分步骤 | `decomposing-requirements` breaks them into sub-projects |
 | Verification results are not recorded / 验证结果没有记录 | `documenting-verification` captures test/build/lint results |
@@ -58,14 +58,15 @@ The original Superpowers workflow has a gap: review findings, debugging sessions
               │                                   │
               │   Per task / 每个任务:            │
               │   ┌────────────────────────┐     │
-              │   │ Implement → commit     │     │
-              │   │ documenting-execution   │ ←── 执行记录
-              │   │ Verify                  │     │
-              │   │ documenting-verification│ ←── 验证记录
-              │   │ Debug (if needed)       │     │
-              │   │ documenting-debugging   │ ←── 调试记录
-              │   │ Code review             │     │
-              │   │ documenting-review      │ ←── 审查记录
+              │   │ Implement → commit      │     │
+              │   │ documenting-execution    │ ←── 执行记录
+              │   │ Verify                   │     │
+              │   │ documenting-verification │ ←── 验证记录
+              │   │ Code review              │     │
+              │   │ Fix → verify → re-review │     │
+              │   │ documenting-review       │ ←── 审查记录
+              │   │ Debug (if needed)        │     │
+              │   │ documenting-debugging    │ ←── 调试记录
               │   └────────────────────────┘     │
               └────────────────┬──────────────────┘
                                │
@@ -143,9 +144,9 @@ Records symptom → root cause → fix → verification. Prevents re-investigati
 **When:** After each code review cycle / 每次代码审查后
 **Output:** Appends to `docs/superpowers/review-log/YYYY-MM-DD-<feature>.md`
 
-Records all findings (CRITICAL/IMPORTANT/MINOR) with resolution (FIXED/DEFERRED/REJECTED). No finding is silently dropped.
+Records all findings (CRITICAL/IMPORTANT/MINOR) with resolution, re-check status, and reviewer continuity. No finding is silently dropped, and re-review prefers the original reviewer when possible.
 
-记录所有发现（严重/重要/次要）及解决方案（已修复/已推迟/已拒绝）。不会丢失任何发现。
+记录所有发现（严重/重要/次要）、解决状态、复核状态与 reviewer 连续性。不会丢失任何发现，并且在可能时优先由原 reviewer 复核。
 
 ### documenting-completion / 完成总结
 

@@ -70,9 +70,11 @@ For subsequent features, the structure already exists — just start the workflo
                     │   │ 3. Verification            │    │
                     │   │ 4. documenting-verification│ ←── appends to execution-log
                     │   │ 5. Code review             │    │
-                    │   │ 6. documenting-review       │ ←── appends to review-log
-                    │   │ 7. [Debug if needed]       │    │
-                    │   │ 8. documenting-debugging    │ ←── creates debugging-log entry
+                    │   │ 6. Fix + verification      │    │
+                    │   │ 7. Re-review              │    │
+                    │   │ 8. documenting-review       │ ←── appends to review-log
+                    │   │ 9. [Debug if needed]       │    │
+                    │   │ 10. documenting-debugging   │ ←── creates debugging-log entry
                     │   └──────────────────────────┘    │
                     └────────────────┬──────────────────┘
                                      │
@@ -145,10 +147,15 @@ Skip this phase if the requirement is a single, well-scoped feature.
 4d. Code review (spec compliance → code quality)
     → invoke documenting-review
 
-4e. If review finds issues → fix → re-review
-    → update review log entry
+4e. If review finds issues → implementer fixes
+    → main session runs verification
+    → prefer same reviewer for re-check
+    → fallback to fresh reviewer if original reviewer is unavailable or still lacks context
+    → update review log entry with cycle linkage and re-check status
 
-4f. Move to next task
+4f. If re-check finds new issues, record them as new findings and continue the loop
+
+4g. Move to next task
 ```
 
 ### Phase 5: Completion
