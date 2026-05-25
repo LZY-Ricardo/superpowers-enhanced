@@ -111,13 +111,14 @@ Before proposing changes to skill design, workflow philosophy, or architecture, 
 
 This fork adds documentation and requirement decomposition skills on top of the core Superpowers workflow. These skills ensure every development phase produces persistent documentation.
 
-### Enhanced Skills (8 new)
+### Enhanced Skills (9 new)
 
 | Skill | Purpose |
 |-------|---------|
 | `decomposing-requirements` | Break large requirements into sub-projects before brainstorming |
 | `init-enhanced-workflow` | One-time project setup: directory structure + CLAUDE.md + docs |
 | `using-enhanced-workflow` | Master flow reference: complete phase map and skill chaining |
+| `installing-superpowers-enhanced` | Install/upgrade the enhanced plugin (command + manual methods) |
 | `documenting-execution` | Record task execution status, deviations, and decisions |
 | `documenting-verification` | Record verification results (tests, build, lint) |
 | `documenting-debugging` | Record debugging sessions: symptom → root cause → fix |

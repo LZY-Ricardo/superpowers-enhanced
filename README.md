@@ -8,13 +8,14 @@
 >
 > 详细增强流程文档请参阅 [ENHANCED.md](ENHANCED.md)。
 
-**8 new enhanced skills / 8 个新增增强 skill：**
+**9 new enhanced skills / 9 个新增增强 skill：**
 
 | Skill | Purpose / 用途 |
 |-------|---------------|
 | `decomposing-requirements` | Break large requirements into sub-projects / 将大需求拆分为子项目 |
 | `init-enhanced-workflow` | One-time project setup / 一次性项目初始化 |
 | `using-enhanced-workflow` | Master flow reference / 总流程参考 |
+| `installing-superpowers-enhanced` | Install/upgrade the enhanced plugin / 安装或升级增强版插件 |
 | `documenting-execution` | Record task progress / 记录任务执行进度 |
 | `documenting-verification` | Record verification results / 记录验证结果 |
 | `documenting-debugging` | Record debugging sessions / 记录调试过程 |
