@@ -29,7 +29,9 @@ When using this workflow in a project for the first time:
 
 For subsequent features, the structure already exists — just start the workflow.
 
-**Template ownership:** Project guidance files copied into repos come from the canonical template files in this directory, including the project `CLAUDE.md` template. This `SKILL.md` is the runtime reference for Claude, not the direct copy source for project files.
+**Template ownership:** Project guidance files copied into repos come from the canonical template files in this directory, including the project `CLAUDE.md` template and `docs/superpowers/version.json` template. This `SKILL.md` is the runtime reference for Claude, not the direct copy source for project files.
+
+**Metadata semantics:** Projects may record both `pluginVersion` and `workflowTemplateVersion` in `docs/superpowers/version.json`. In the initial implementation they are equal, but they are intentionally separate so future template-only versioning can be introduced without redesigning the metadata file.
 
 ## The Complete Flow
 

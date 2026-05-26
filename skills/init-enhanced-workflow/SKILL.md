@@ -17,7 +17,8 @@ Complete in order:
 2. **Create directory structure**
 3. **Write project CLAUDE.md** — concise rules, highest AI priority
 4. **Write docs/superpowers/README.md** — detailed workflow reference
-5. **Commit** — commit the initialization separately from any code changes
+5. **Write docs/superpowers/version.json** — machine-readable workflow metadata
+6. **Commit** — commit the initialization separately from any code changes
 
 ## Step 2: Create Directory Structure
 
@@ -62,7 +63,36 @@ cp "$TEMPLATE_DIR/docs-superpowers-conventions-template.md" docs/superpowers/con
 
 Then customize the Active Features table in `README.md` with the project's first feature (if known), or leave it as a template.
 
-## Step 5: Commit
+## Step 5: Write docs/superpowers/version.json
+
+Write workflow metadata only after the guidance files have been created successfully.
+
+Use:
+
+```bash
+VERSION_TEMPLATE="$TEMPLATE_DIR/docs-superpowers-version-template.json"
+NOW_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+PLUGIN_VERSION="$(python3 - <<'PY'
+import json
+from pathlib import Path
+print(json.loads(Path('package.json').read_text())['version'])
+PY
+)"
+
+python3 - <<PY
+import json
+from pathlib import Path
+
+template = json.loads(Path("$VERSION_TEMPLATE").read_text())
+for key in ("pluginVersion", "workflowTemplateVersion"):
+    template[key] = "$PLUGIN_VERSION"
+for key in ("initializedAt", "lastUpgradedAt"):
+    template[key] = "$NOW_UTC"
+Path("docs/superpowers/version.json").write_text(json.dumps(template, indent=2) + "\n")
+PY
+```
+
+## Step 6: Commit
 
 ```bash
 git add docs/superpowers/ CLAUDE.md
