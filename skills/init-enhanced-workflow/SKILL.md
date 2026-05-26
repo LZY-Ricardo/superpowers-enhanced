@@ -17,8 +17,9 @@ Complete in order:
 2. **Create directory structure**
 3. **Write project CLAUDE.md** — concise rules, highest AI priority
 4. **Write docs/superpowers/README.md** — detailed workflow reference
-5. **Write docs/superpowers/version.json** — machine-readable workflow metadata
-6. **Commit** — commit the initialization separately from any code changes
+5. **Write docs/superpowers/status.md** — live recovery entrypoint
+6. **Write docs/superpowers/version.json** — machine-readable workflow metadata
+7. **Commit** — commit the initialization separately from any code changes
 
 ## Step 2: Create Directory Structure
 
@@ -59,6 +60,7 @@ TEMPLATE_DIR=~/.claude/plugins/cache/superpowers-enhanced/latest/skills/using-en
 cp "$TEMPLATE_DIR/docs-superpowers-README-template.md" docs/superpowers/README.md
 cp "$TEMPLATE_DIR/docs-superpowers-workflow-template.md" docs/superpowers/workflow.md
 cp "$TEMPLATE_DIR/docs-superpowers-conventions-template.md" docs/superpowers/conventions.md
+cp "$TEMPLATE_DIR/docs-superpowers-status-template.md" docs/superpowers/status.md
 ```
 
 Then customize the Active Features table in `README.md` with the project's first feature (if known), or leave it as a template.

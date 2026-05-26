@@ -183,11 +183,13 @@ Skip this phase if the requirement is a single, well-scoped feature.
 
 When joining a project that already has Superpowers docs:
 
-1. **Check for completion summary first** — if it exists in `completion/`, the feature is done
-2. **Check execution-log** — shows which tasks are done, blocked, or remaining
-3. **Check review-log** — shows deferred items that might need attention
-4. **Check debugging-log** — shows known issues and workarounds
-5. **Resume from where the last entry left off**
+1. **Check `status.md` first** — it is the live recovery surface for the active feature, current phase, blockers, review threads, and next step
+2. **Check decomposition/** — this is the macro-level map for large initiatives and sub-project ordering
+3. **Check README.md** — this is the index page for where the detailed artifacts live
+4. **Check execution-log** — shows which tasks are done, blocked, or remaining
+5. **Check review-log** — shows deferred items that might need attention
+6. **Check debugging-log** — shows known issues and workarounds
+7. **Resume from where the current status and linked artifacts indicate**
 
 Do NOT restart the workflow from scratch. Read existing docs and continue.
 

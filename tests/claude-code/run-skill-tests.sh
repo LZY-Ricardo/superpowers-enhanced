@@ -76,6 +76,7 @@ tests=(
     "test-subagent-driven-development.sh"
     "test-init-enhanced-workflow.sh"
     "test-decomposing-requirements.sh"
+    "test-status-surface.sh"
 )
 
 # Integration tests (slow, full execution)

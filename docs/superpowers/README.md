@@ -15,7 +15,8 @@ docs/superpowers/
 ├── execution-log/     ← Task progress + verification results
 ├── debugging-log/     ← Bug investigation records
 ├── review-log/        ← Code review findings and resolutions
-└── completion/        ← Final completion summaries
+├── completion/        ← Final completion summaries
+└── status.md          ← Current recovery entrypoint for active work
 ```
 
 ## Quick Navigation
@@ -24,6 +25,7 @@ docs/superpowers/
 |-------------|-----------|
 | Understand the full workflow | [workflow.md](workflow.md) |
 | Know what each file contains | [conventions.md](conventions.md) |
+| Start recovery from current work | [status.md](status.md) |
 | Find a feature's docs | Active Features table below |
 | Check current progress | `execution-log/<feature-name>.md` |
 | Find deferred issues | `review-log/<feature-name>.md` → Deferred Items section |
