@@ -85,6 +85,8 @@ The original Superpowers workflow has a gap: review findings, debugging sessions
 
 ## Enhanced Skills Reference / 增强 Skill 参考
 
+> **Note / 说明：** The enhanced skills listed in this document are the repo-shipped workflow skills only. Local maintenance skills are intentionally kept outside the repository.
+
 ### decomposing-requirements / 需求拆分
 
 **When:** Requirement involves 3+ features or is vague / 需求涉及 3+ 功能或比较模糊

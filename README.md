@@ -23,7 +23,11 @@
 
 **All 14 original skills are preserved.** See [MAINTENANCE.md](MAINTENANCE.md) for development and maintenance guide.
 
+**Note:** The enhanced skill count above includes only repo-shipped workflow skills. Local maintenance skills are intentionally kept outside this repository.
+
 **保留了全部 14 个原始 skill。** 开发和维护指南请参阅 [MAINTENANCE.md](MAINTENANCE.md)。
+
+**说明：** 上面的增强 skill 数量只统计仓库内共享工作流 skill。本地维护型 skill 会有意保留在仓库外。
 
 ---
 

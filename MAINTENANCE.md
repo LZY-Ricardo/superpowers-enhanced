@@ -224,6 +224,51 @@ git commit -m "chore: sync with upstream superpowers (upstream <sha>)"
 
 ---
 
+## Skill Placement Decisions / Skill 放置决策
+
+Use this section when deciding whether a new skill belongs in the shared repository or only in local `~/.claude/skills/`.
+
+本节用于判断一个新 skill 应该进入共享仓库，还是只放在本地 `~/.claude/skills/`。
+
+### Two Skill Classes / 两类 Skill
+
+**Repo-shipped workflow skill / 仓库内共享工作流 skill**
+- Changes or supports the shared Enhanced Superpowers workflow used inside ordinary project repositories
+- Benefits other Enhanced Superpowers users during normal project work
+
+**Local maintenance skill / 本地维护型 skill**
+- Primarily manages plugin installation, updating, migration, local environment setup, or personal operational workflow
+- Useful locally, but not part of the shared project-development workflow itself
+
+### Placement Checklist / 放置检查清单
+
+Before adding a new skill, answer:
+1. Does this affect the shared development workflow used inside project repos?
+2. Would another Enhanced Superpowers user benefit from this inside normal project work?
+3. Is it primarily about plugin install/update/migration/local operations?
+4. Would putting it in the repo increase shared workflow complexity without improving ordinary project execution?
+
+If the answers trend toward local operations, the skill stays local.
+
+如果答案更偏向本地运维，那么这个 skill 应该留在本地。
+
+### Examples / 例子
+
+| Skill | Placement | Why |
+|------|-----------|-----|
+| `installing-superpowers-enhanced` | Local maintenance | Manages plugin install/update/uninstall for one user's environment |
+| `upgrading-enhanced-workflow-project` | Local maintenance | Helps migrate already-initialized projects in a user's environment |
+| `documenting-review` | Repo workflow | Shared workflow behavior for all Enhanced Superpowers users |
+| `init-enhanced-workflow` | Repo workflow | Shared project workflow initialization behavior |
+
+### Inventory Rule / 计数规则
+
+The repository's enhanced skill counts and tables include only repo-shipped workflow skills. Personal/local maintenance skills are intentionally excluded.
+
+仓库里的增强 skill 数量和表格只统计仓库内共享工作流 skill，不包含本地维护型 skill。
+
+---
+
 ## File Reference / 文件参考
 
 | File | Purpose |

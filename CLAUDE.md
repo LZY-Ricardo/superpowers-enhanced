@@ -111,6 +111,12 @@ Before proposing changes to skill design, workflow philosophy, or architecture, 
 
 This fork adds documentation and requirement decomposition skills on top of the core Superpowers workflow. These skills ensure every development phase produces persistent documentation.
 
+### Local Maintenance Skills vs Repo Workflow Skills
+
+Local maintenance skills (install/update/uninstall/migration/personal operational helpers) do not belong in this repository by default. They should live in `~/.claude/skills/` unless they directly support the shared Enhanced Superpowers project workflow used inside ordinary repos.
+
+Do not count local maintenance skills as part of the repository's enhanced skill inventory.
+
 ### Enhanced Skills (8 new)
 
 | Skill | Purpose |
