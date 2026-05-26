@@ -10,7 +10,8 @@ run_claude() {
     local output_file=$(mktemp)
 
     # Build command
-    local cmd="claude -p \"$prompt\""
+    local plugin_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+    local cmd="claude -p \"$prompt\" --plugin-dir \"$plugin_dir\" --permission-mode bypassPermissions"
     if [ -n "$allowed_tools" ]; then
         cmd="$cmd --allowed-tools=$allowed_tools"
     fi

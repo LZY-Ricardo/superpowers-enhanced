@@ -20,14 +20,16 @@ When using this workflow in a project for the first time:
    mkdir -p docs/superpowers/{decomposition,specs,plans,execution-log,debugging-log,review-log,completion}
    ```
 
-2. Copy the README template from this skill's directory to `docs/superpowers/README.md`:
+2. Copy the README template from this plugin's template directory to `docs/superpowers/README.md`:
    ```bash
-   cp ~/.claude/skills/using-enhanced-workflow/docs-superpowers-README-template.md docs/superpowers/README.md
+   cp ~/.claude/plugins/cache/superpowers-enhanced/latest/skills/using-enhanced-workflow/docs-superpowers-README-template.md docs/superpowers/README.md
    ```
 
 3. Commit the structure to the project.
 
 For subsequent features, the structure already exists — just start the workflow.
+
+**Template ownership:** Project guidance files copied into repos come from the canonical template files in this directory, including the project `CLAUDE.md` template. This `SKILL.md` is the runtime reference for Claude, not the direct copy source for project files.
 
 ## The Complete Flow
 
