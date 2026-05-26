@@ -80,18 +80,46 @@ After completing any sub-project, check with your human partner:
 
 If priorities change, update the decomposition doc with the new order and rationale.
 
+## State Ownership
+
+The decomposition document is maintained by the **main session**, not automatically by downstream documenting skills.
+
+Update the decomposition doc when:
+- a sub-project becomes active
+- a sub-project completes
+- a sub-project is deferred or skipped
+- dependency order changes
+- the recommended next sub-project changes
+
+The decomposition document is the macro-level map. Detailed execution, review, debugging, and completion records still belong to each sub-project's own artifact chain.
+
 ## Decomposition Output
+
+Start the saved decomposition document with a quick-scan status map:
+
+```markdown
+## Sub-project Overview
+
+| Sub-project | Status | Priority | Dependencies | Next Step |
+|---|---|---|---|---|
+| [Name] | Pending | 1 | — | Start brainstorming |
+```
+
+Then describe each sub-project in detail.
 
 Each sub-project should specify:
 
 | Field | Description |
 |-------|-------------|
 | **Name** | Short, descriptive name |
+| **Status** | `Pending`, `In Progress`, `Blocked`, `Completed`, `Deferred`, or `Skipped` |
+| **Priority** | Relative execution order chosen with your human partner |
 | **Goal** | One sentence — what it delivers |
 | **Scope** | What's included and explicitly excluded |
 | **Dependencies** | Which other sub-projects must complete first |
 | **Risks** | Unknowns, technical challenges, external dependencies |
 | **Deliverable** | What the human partner gets when it's done |
+| **Next Step** | What should happen next for this sub-project |
 
 ## Dependency Visualization
 
