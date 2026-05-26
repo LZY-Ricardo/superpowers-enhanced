@@ -53,6 +53,11 @@ grep -q '\*\*Priority:\*\*' "$DOC_FILE" || FAILED=$((FAILED + 1))
 echo "Test 11: active decomposition doc includes Next Step field..."
 grep -q '\*\*Next Step:\*\*' "$DOC_FILE" || FAILED=$((FAILED + 1))
 
+echo "Test 12: active decomposition doc is usable as a macro map..."
+grep -q '| A 模板与真相源收敛 | Completed |' "$DOC_FILE" || FAILED=$((FAILED + 1))
+grep -q '| B 项目版本标识与升级机制 | Completed |' "$DOC_FILE" || FAILED=$((FAILED + 1))
+grep -q '| G 分解文档状态追踪增强 | In Progress\|Completed |' "$DOC_FILE" || FAILED=$((FAILED + 1))
+
 echo ""
 if [ $FAILED -eq 0 ]; then
   echo "STATUS: PASSED"

@@ -4,12 +4,66 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+source "$SCRIPT_DIR/test-helpers.sh"
 TEMPLATE="$PLUGIN_DIR/skills/using-enhanced-workflow/docs-project-claude-template.md"
 README_TEMPLATE="$PLUGIN_DIR/skills/using-enhanced-workflow/docs-superpowers-README-template.md"
 WORKFLOW_TEMPLATE="$PLUGIN_DIR/skills/using-enhanced-workflow/docs-superpowers-workflow-template.md"
 CONVENTIONS_TEMPLATE="$PLUGIN_DIR/skills/using-enhanced-workflow/docs-superpowers-conventions-template.md"
+STATUS_TEMPLATE="$PLUGIN_DIR/skills/using-enhanced-workflow/docs-superpowers-status-template.md"
 VERSION_TEMPLATE="$PLUGIN_DIR/skills/using-enhanced-workflow/docs-superpowers-version-template.json"
+PACKAGE_JSON="$PLUGIN_DIR/package.json"
 INIT_SKILL="$PLUGIN_DIR/skills/init-enhanced-workflow/SKILL.md"
+
+run_init_behavior_scenario() {
+  local project_dir="$1"
+
+  if [ ! -d "$project_dir/.git" ]; then
+    echo "  temp project is not initialized as a git repository" >&2
+    return 1
+  fi
+
+  local plugin_version
+  plugin_version="$(python3 - <<PY
+import json
+from pathlib import Path
+print(json.loads(Path("$PACKAGE_JSON").read_text())["version"])
+PY
+)"
+
+  (
+    set -euo pipefail
+    cd "$project_dir"
+
+    mkdir -p docs/superpowers/{decomposition,specs,plans,execution-log,debugging-log,review-log,completion}
+
+    if [ -f CLAUDE.md ]; then
+      printf '\n\n' >> CLAUDE.md
+      cat "$TEMPLATE" >> CLAUDE.md
+    else
+      cp "$TEMPLATE" CLAUDE.md
+    fi
+
+    cp "$README_TEMPLATE" docs/superpowers/README.md
+    cp "$WORKFLOW_TEMPLATE" docs/superpowers/workflow.md
+    cp "$CONVENTIONS_TEMPLATE" docs/superpowers/conventions.md
+    cp "$STATUS_TEMPLATE" docs/superpowers/status.md
+
+    local now_utc
+    now_utc="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+    python3 - <<PY
+import json
+from pathlib import Path
+
+template = json.loads(Path("$VERSION_TEMPLATE").read_text())
+for key in ("pluginVersion", "workflowTemplateVersion"):
+    template[key] = "$plugin_version"
+for key in ("initializedAt", "lastUpgradedAt"):
+    template[key] = "$now_utc"
+Path("docs/superpowers/version.json").write_text(json.dumps(template, indent=2) + "\n")
+PY
+  )
+}
 
 FAILED=0
 
@@ -157,6 +211,76 @@ else
 fi
 
 echo ""
+echo "Test 16: temp project init creates expected guidance artifacts..."
+behavior_test_dir="$(create_test_project)"
+trap 'cleanup_test_project "$behavior_test_dir"' EXIT
+
+mkdir -p "$behavior_test_dir/.git"
+if [ -f "$behavior_test_dir/CLAUDE.md" ]; then
+  echo "  [FAIL] temp project unexpectedly already has CLAUDE.md"
+  FAILED=$((FAILED + 1))
+else
+  if run_init_behavior_scenario "$behavior_test_dir"; then
+    expected_files=(
+      "$behavior_test_dir/CLAUDE.md"
+      "$behavior_test_dir/docs/superpowers/README.md"
+      "$behavior_test_dir/docs/superpowers/workflow.md"
+      "$behavior_test_dir/docs/superpowers/conventions.md"
+      "$behavior_test_dir/docs/superpowers/status.md"
+      "$behavior_test_dir/docs/superpowers/version.json"
+    )
+
+    missing=0
+    for file in "${expected_files[@]}"; do
+      if [ ! -f "$file" ]; then
+        echo "  [FAIL] missing expected artifact: $file"
+        missing=1
+      fi
+    done
+
+    if [ "$missing" -eq 0 ] \
+      && cmp -s "$TEMPLATE" "$behavior_test_dir/CLAUDE.md" \
+      && cmp -s "$README_TEMPLATE" "$behavior_test_dir/docs/superpowers/README.md" \
+      && cmp -s "$WORKFLOW_TEMPLATE" "$behavior_test_dir/docs/superpowers/workflow.md" \
+      && cmp -s "$CONVENTIONS_TEMPLATE" "$behavior_test_dir/docs/superpowers/conventions.md" \
+      && cmp -s "$STATUS_TEMPLATE" "$behavior_test_dir/docs/superpowers/status.md"; then
+      plugin_version="$(python3 - <<PY
+import json
+from pathlib import Path
+print(json.loads(Path("$PACKAGE_JSON").read_text())["version"])
+PY
+)"
+
+      if python3 - <<PY
+import json
+import re
+from pathlib import Path
+
+version = json.loads(Path("$behavior_test_dir/docs/superpowers/version.json").read_text())
+plugin_version = "$plugin_version"
+pattern = re.compile(r'^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$')
+assert version["pluginVersion"] == plugin_version
+assert version["workflowTemplateVersion"] == plugin_version
+assert pattern.match(version["initializedAt"])
+assert pattern.match(version["lastUpgradedAt"])
+assert version["initializedAt"] == version["lastUpgradedAt"]
+PY
+      then
+        echo "  [PASS] temp project init contract materialized expected artifacts"
+      else
+        echo "  [FAIL] version.json contents did not match init contract"
+        FAILED=$((FAILED + 1))
+      fi
+    else
+      echo "  [FAIL] guidance artifacts did not match canonical templates"
+      FAILED=$((FAILED + 1))
+    fi
+  else
+    echo "  [FAIL] temp project init scenario did not complete"
+    FAILED=$((FAILED + 1))
+  fi
+fi
+
 if [ $FAILED -eq 0 ]; then
   echo "STATUS: PASSED"
   exit 0

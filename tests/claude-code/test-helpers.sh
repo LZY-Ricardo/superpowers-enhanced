@@ -1,32 +1,71 @@
 #!/usr/bin/env bash
 # Helper functions for Claude Code skill tests
 
-# Run Claude Code with a prompt and capture output
+TEST_HELPERS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CLAUDE_TEST_PLUGIN_DIR="$(cd "$TEST_HELPERS_DIR/../.." && pwd)"
+
+# Resolve the plugin directory used for headless Claude invocations.
+# Usage: get_claude_plugin_dir
+get_claude_plugin_dir() {
+    printf '%s\n' "$CLAUDE_TEST_PLUGIN_DIR"
+}
+
+# Run Claude Code with a prompt and capture combined stdout/stderr.
+# Contract:
+# - always uses the repo root as --plugin-dir
+# - always uses --permission-mode bypassPermissions
+# - returns Claude's exit code, or 124 on timeout
+# - prints combined stdout/stderr on success to stdout
+# - prints a clear timeout/failure message plus combined output to stderr on failure
 # Usage: run_claude "prompt text" [timeout_seconds] [allowed_tools]
 run_claude() {
     local prompt="$1"
-    local timeout="${2:-60}"
+    local timeout_seconds="${2:-60}"
     local allowed_tools="${3:-}"
-    local output_file=$(mktemp)
+    local output_file
+    output_file=$(mktemp)
 
-    # Build command
-    local plugin_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-    local cmd="claude -p \"$prompt\" --plugin-dir \"$plugin_dir\" --permission-mode bypassPermissions"
+    local plugin_dir
+    plugin_dir="$(get_claude_plugin_dir)"
+
+    local claude_bin="${CLAUDE_BIN:-claude}"
+    local -a cmd=(
+        "$claude_bin"
+        -p "$prompt"
+        --plugin-dir "$plugin_dir"
+        --permission-mode bypassPermissions
+    )
+
     if [ -n "$allowed_tools" ]; then
-        cmd="$cmd --allowed-tools=$allowed_tools"
+        cmd+=("--allowed-tools=$allowed_tools")
     fi
 
-    # Run Claude in headless mode with timeout
-    if timeout "$timeout" bash -c "$cmd" > "$output_file" 2>&1; then
-        cat "$output_file"
+    timeout --kill-after=5 "$timeout_seconds" "${cmd[@]}" < /dev/null > "$output_file" 2>&1
+    local exit_code=$?
+
+    if [ "$exit_code" -eq 0 ]; then
+        if [ -s "$output_file" ]; then
+            cat "$output_file"
+            rm -f "$output_file"
+            return 0
+        fi
+
+        printf 'run_claude succeeded but produced no output (plugin-dir: %s, permission-mode: bypassPermissions)\n' "$plugin_dir" >&2
         rm -f "$output_file"
-        return 0
-    else
-        local exit_code=$?
-        cat "$output_file" >&2
-        rm -f "$output_file"
-        return $exit_code
+        return 1
     fi
+    if [ "$exit_code" -eq 124 ]; then
+        printf 'run_claude timed out after %ss (plugin-dir: %s, permission-mode: bypassPermissions)\n' "$timeout_seconds" "$plugin_dir" >&2
+    else
+        printf 'run_claude failed with exit code %s (plugin-dir: %s, permission-mode: bypassPermissions)\n' "$exit_code" "$plugin_dir" >&2
+    fi
+
+    if [ -s "$output_file" ]; then
+        cat "$output_file" >&2
+    fi
+
+    rm -f "$output_file"
+    return "$exit_code"
 }
 
 # Check if output contains a pattern
@@ -193,6 +232,7 @@ EOF
 }
 
 # Export functions for use in tests
+export -f get_claude_plugin_dir
 export -f run_claude
 export -f assert_contains
 export -f assert_not_contains

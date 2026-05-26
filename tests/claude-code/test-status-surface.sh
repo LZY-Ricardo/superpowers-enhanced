@@ -35,6 +35,12 @@ grep -q 'Current Artifact Links' "$STATUS_DOC" || FAILED=$((FAILED + 1))
 grep -q 'Open Blockers' "$STATUS_DOC" || FAILED=$((FAILED + 1))
 grep -q 'Next Recommended Action' "$STATUS_DOC" || FAILED=$((FAILED + 1))
 
+echo "Test 1: status.md can serve as first recovery stop..."
+grep -q 'Decomposition:' "$STATUS_DOC" || FAILED=$((FAILED + 1))
+grep -q 'Current spec:' "$STATUS_DOC" || FAILED=$((FAILED + 1))
+grep -q 'Current plan:' "$STATUS_DOC" || FAILED=$((FAILED + 1))
+grep -q 'Next Recommended Action' "$STATUS_DOC" || FAILED=$((FAILED + 1))
+
 if [ $FAILED -eq 0 ]; then
   echo "STATUS: PASSED"
   exit 0

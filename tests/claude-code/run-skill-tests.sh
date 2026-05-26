@@ -71,12 +71,16 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# List of skill tests to run (fast unit tests)
+# List of skill tests to run (fast structural tests)
 tests=(
-    "test-subagent-driven-development.sh"
     "test-init-enhanced-workflow.sh"
     "test-decomposing-requirements.sh"
     "test-status-surface.sh"
+)
+
+# Extended/behavior tests (slower Claude-driven checks)
+extended_tests=(
+    "test-subagent-driven-development.sh"
 )
 
 # Integration tests (slow, full execution)
