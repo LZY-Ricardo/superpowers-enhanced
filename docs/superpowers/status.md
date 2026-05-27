@@ -1,31 +1,31 @@
 # Project Status
 
-**Active sub-project:** C. 项目恢复与状态索引
+**Active sub-project:** None — engineering-upgrade initiative complete
 **Active feature:** Workflow Engineering Upgrade
-**Current phase:** Implementation
-**Last updated:** 2026-05-26 14:20
+**Current phase:** Completion
+**Last updated:** 2026-05-27 11:00
 
 ## Current Artifact Links
 
 - **Decomposition:** [2026-05-25-workflow-engineering-upgrade.md](decomposition/2026-05-25-workflow-engineering-upgrade.md)
-- **Current spec:** [2026-05-26-project-recovery-and-status-indexing-design.md](specs/2026-05-26-project-recovery-and-status-indexing-design.md)
-- **Current plan:** [2026-05-26-project-recovery-and-status-indexing.md](plans/2026-05-26-project-recovery-and-status-indexing.md)
-- **Current execution log:** —
-- **Current review log:** —
+- **Latest spec:** [2026-05-26-workflow-version-automation-design.md](specs/2026-05-26-workflow-version-automation-design.md)
+- **Latest plan:** [2026-05-26-workflow-version-automation.md](plans/2026-05-26-workflow-version-automation.md)
+- **Latest execution log:** [2026-05-27-workflow-version-automation.md](execution-log/2026-05-27-workflow-version-automation.md)
+- **Latest review log:** [2026-05-27-workflow-version-automation.md](review-log/2026-05-27-workflow-version-automation.md)
 - **Current debugging references:** none
-- **Current completion summary:** —
+- **Latest completion summary:** [2026-05-27-workflow-version-automation-summary.md](completion/2026-05-27-workflow-version-automation-summary.md)
 
 ## Open Review Threads
 
-- None yet for subproject C. Current work is still in the implementation slice before review recording.
+- None. The current engineering-upgrade subprojects have been completed and reviewed.
 
 ## Open Blockers
 
-- No project-specific blockers for subproject C yet.
-- The legacy fast-suite blocker (`test-subagent-driven-development.sh` timeout) remains known test-system debt, but it does not block structural status-surface work.
+- No active blockers.
+- Optional future work remains, but nothing is currently blocking the completed engineering-upgrade initiative.
 
 ## Next Recommended Action
 
-1. Finish the implementation slice for subproject C.
-2. Record execution, verification, review, and completion artifacts for subproject C.
-3. Then return to the decomposition doc and move to subproject D.
+1. Review the full engineering-upgrade initiative end-to-end.
+2. Decide whether to open a new follow-up initiative for optional future work (for example, enforcement automation or independent template-version release cadence).
+3. Use the updated workflow, metadata, decomposition, status, maintenance, and testing systems as the new baseline.
