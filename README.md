@@ -21,11 +21,11 @@
 | `documenting-review` | Record code review findings / 记录代码审查发现 |
 | `documenting-completion` | Write completion summary / 编写完成总结 |
 
-**All 14 original skills are preserved.** See [MAINTENANCE.md](MAINTENANCE.md) for development and maintenance guide.
+**All 14 original skills are preserved.** See [GETTING-STARTED.md](GETTING-STARTED.md) for the quickest install/use guide and [MAINTENANCE.md](MAINTENANCE.md) for development and maintenance guidance.
 
 **Note:** The enhanced skill count above includes only repo-shipped workflow skills. Local maintenance skills are intentionally kept outside this repository.
 
-**保留了全部 14 个原始 skill。** 开发和维护指南请参阅 [MAINTENANCE.md](MAINTENANCE.md)。
+**保留了全部 14 个原始 skill。** 快速安装/使用请参阅 [GETTING-STARTED.md](GETTING-STARTED.md)，开发和维护指南请参阅 [MAINTENANCE.md](MAINTENANCE.md)。
 
 **说明：** 上面的增强 skill 数量只统计仓库内共享工作流 skill。本地维护型 skill 会有意保留在仓库外。
 
