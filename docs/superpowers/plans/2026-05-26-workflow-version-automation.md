@@ -178,8 +178,8 @@ Expected: `workflowTemplateVersion` matches the bumped repo version and appears 
 
 - [ ] **Step 4: Decide final version state**
 
-If `5.1.1` should become the repository's actual new version, keep it.
-If this was only a throwaway verification bump, revert or choose a different final target before any commit.
+Use the synchronized bump step to move the repository to the chosen real release version.
+If a future run is only a throwaway verification bump, revert or choose a different final target before any commit.
 
 - [ ] **Step 5: Commit**
 

@@ -48,7 +48,7 @@ Subproject F introduced workflow template version as a first-class repository-ma
 | Issue | Impact | Workaround | Priority |
 |------|--------|------------|----------|
 | `--audit` still reports several undeclared `5.1.0` matches in docs/examples and installation docs | Audit output is noisier than ideal and requires human interpretation | Treat current audit output as informational; decide later whether to add more excludes or declare more version-managed example locations | LOW |
-| The new automation path is wired, but this subproject intentionally did not change the repository's released version yet | There is no proof here that a real kept bump to `5.1.1` or later has been published from this workstream | Use the next actual release cycle to exercise the synchronized bump end-to-end | LOW |
+| The new automation path is now wired and has been exercised with a real synchronized bump to 5.1.1, but future template-only decoupling is still intentionally deferred | The repository can now bump plugin and workflow template versions together, but cannot yet release template-only versions independently | Revisit only if a future release needs template-only version movement | LOW |
 
 ## Deferred Items
 
