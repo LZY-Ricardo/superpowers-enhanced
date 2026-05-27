@@ -21,11 +21,11 @@
 | `documenting-review` | Record code review findings / 记录代码审查发现 |
 | `documenting-completion` | Write completion summary / 编写完成总结 |
 
-**All 14 original skills are preserved.** See [GETTING-STARTED.md](GETTING-STARTED.md) for the quickest install/use guide and [MAINTENANCE.md](MAINTENANCE.md) for development and maintenance guidance.
+**All 14 original skills are preserved.** See [GETTING-STARTED.md](GETTING-STARTED.md) (English) / [GETTING-STARTED.zh-CN.md](GETTING-STARTED.zh-CN.md) (中文) for the install/use guide, and [MAINTENANCE.md](MAINTENANCE.md) for development and maintenance guidance.
 
 **Note:** The enhanced skill count above includes only repo-shipped workflow skills. Local maintenance skills are intentionally kept outside this repository.
 
-**保留了全部 14 个原始 skill。** 快速安装/使用请参阅 [GETTING-STARTED.md](GETTING-STARTED.md)，开发和维护指南请参阅 [MAINTENANCE.md](MAINTENANCE.md)。
+**保留了全部 14 个原始 skill。** 快速安装/使用请参阅 [GETTING-STARTED.md](GETTING-STARTED.md)（英文）或 [GETTING-STARTED.zh-CN.md](GETTING-STARTED.zh-CN.md)（中文），开发和维护指南请参阅 [MAINTENANCE.md](MAINTENANCE.md)。
 
 **说明：** 上面的增强 skill 数量只统计仓库内共享工作流 skill。本地维护型 skill 会有意保留在仓库外。
 
@@ -67,20 +67,18 @@ Install this enhanced version from the fork repository. Installation differs by 
 
 ### Claude Code
 
-Install directly from the enhanced repository:
+Use the manual installation path described in [GETTING-STARTED.md](GETTING-STARTED.md).
 
-```bash
-/plugin install https://github.com/LZY-Ricardo/superpowers-enhanced.git
-```
+At a high level:
+- clone this repository into Claude's plugin cache
+- register the plugin in `installed_plugins.json`
+- ensure it is enabled in `settings.json`
+- restart Claude Code and verify the enhanced skills load
 
 <details>
 <summary>Original Superpowers marketplace (without enhanced skills)</summary>
 
-If you want the original version without enhanced skills:
-
-```bash
-/plugin install superpowers@claude-plugins-official
-```
+If you want the original version without enhanced skills, use the official marketplace/plugin instructions for the upstream project instead of this fork.
 
 </details>
 
