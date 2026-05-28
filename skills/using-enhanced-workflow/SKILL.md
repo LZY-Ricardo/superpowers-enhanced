@@ -25,8 +25,6 @@ When using this workflow in a project for the first time:
    cp ~/.claude/plugins/cache/superpowers-enhanced/latest/skills/using-enhanced-workflow/docs-superpowers-README-template.md docs/superpowers/README.md
    ```
 
-3. Commit the structure to the project.
-
 For subsequent features, the structure already exists — just start the workflow.
 
 **Template ownership:** Project guidance files copied into repos come from the canonical template files in this directory, including the project `CLAUDE.md` template and `docs/superpowers/version.json` template. This `SKILL.md` is the runtime reference for Claude, not the direct copy source for project files.
@@ -141,7 +139,7 @@ Skip this phase if the requirement is a single, well-scoped concern.
 |------|--------|
 | **When** | Spec is approved and the work is ready to implement |
 | **Skill** | `executing-plans` by default; `subagent-driven-development` only when isolation is worth the cost |
-| **Output** | Working code + git commits + execution-log entries |
+| **Output** | Working code + execution-log entries |
 
 **For each task in the plan, run this default sub-loop:**
 
@@ -151,7 +149,6 @@ Skip this phase if the requirement is a single, well-scoped concern.
 
 4b. Implement task
     → use TDD as specified in the plan
-    → commit at the task checkpoint
 
 4c. Run verification
     → tests / build / lint / type-check / manual check as specified
@@ -160,15 +157,16 @@ Skip this phase if the requirement is a single, well-scoped concern.
     → document only if the investigation is substantial or deferred
     → re-verify
 
-4e. Apply review strategy from review-config
-    → self-checklist always runs
+4e. Run self-checklist (explicit Step 5 in the plan)
+    → produce ✅/❌/N/A + note for every item
+    → on any ❌ : stop, report to the human partner, do NOT advance to 4f
     → task-level external review only if configured or forced by plan deviation
     → feature-level review happens later at feature closeout
 
 4f. Write one merged execution-log block
     → Execution
     → Verification
-    → Review (self-checklist)
+    → Review (self-checklist)  ← records 4e outcomes, does not re-run them
     → Review (applied config)
     → Debugging
 

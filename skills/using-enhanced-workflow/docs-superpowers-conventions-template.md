@@ -42,10 +42,9 @@ debugging-log/2026-05-22-token-expiry-race.md
 4. **Fixes must be re-verified before re-review.** Prefer the original reviewer for re-check when continuity matters.
 5. **No merge before completion summary.** Completion summary is the final gate.
 6. **Documentation is append-only** for execution-log, review-log, and debugging-log.
-7. **Commit documentation.** Do not leave workflow docs uncommitted at session end.
-8. **Documentation is mandatory** when using the full workflow. Truly small ad-hoc changes are exempt.
-9. **Self-checklist always runs.** It stays inside the execution-log block unless an external review cycle produces review-log data.
-10. **Review-config governs execution.** Planned work must read `review-config.md` at task start and record how it was applied.
+7. **Documentation is mandatory** when using the full workflow. Truly small ad-hoc changes are exempt.
+8. **Self-checklist runs as an explicit task step (the plan's Step 5).** It must produce `✅` / `❌` / `N/A` plus a note for every item; any `❌` stops execution until the human partner is told. The result is then recorded inside the execution-log block — the log section never substitutes for running the check.
+9. **Review-config governs execution.** Planned work must read `review-config.md` at task start and record how it was applied.
 
 ## Review Config Format
 
@@ -73,7 +72,6 @@ Default task block shape:
 
 **Execution**
 - what changed
-- commits
 - deviations (if any)
 
 **Verification**
@@ -81,13 +79,13 @@ Default task block shape:
 - PASS/FAIL outcomes
 - uncovered areas or intentional skips
 
-**Review (self-checklist)**
-- Spec mapping
-- Interface consistency
-- Tests verify behavior
-- Smell scan
-- Spec-stated boundaries covered
-- Plan deviation check
+**Review (self-checklist)** — record the ✅/❌/N/A outcomes produced in the plan's Step 5; do not re-run the checklist here
+- Spec mapping: [result + note]
+- Interface consistency: [result + note]
+- Tests verify behavior: [result + note]
+- Smell scan: [result + note]
+- Spec-stated boundaries covered: [result + note]
+- Plan deviation check: [result + note]
 
 **Review (applied config)**
 - what review-config required

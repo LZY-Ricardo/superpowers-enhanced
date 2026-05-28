@@ -37,11 +37,13 @@ During Phase 4, every planned task follows this default sub-loop:
 ```
 Step 0: Load review-config
     ↓
-Implement → commit
+Implement
     ↓
 Verify (tests, build, lint, type-check, manual checks)
     ↓ (if meaningful investigation needed)
 Debug → optional debugging-log → re-verify
+    ↓
+Run self-checklist (explicit step — ✅/❌/N/A, stop on ❌)
     ↓
 Apply configured review strategy
     ↓
@@ -53,7 +55,7 @@ Next task
 The merged task block contains:
 - Execution
 - Verification
-- Review (self-checklist)
+- Review (self-checklist) ← records the outcomes of the explicit self-checklist step
 - Review (applied config)
 - Debugging
 
@@ -100,7 +102,7 @@ Execution reads this file at task start and records how it was applied inside ea
 
 - **When:** Spec is approved and implementation is ready
 - **Skill:** `executing-plans` by default; `subagent-driven-development` only when isolation is worth the cost
-- **Output:** Working code + git commits + execution-log entries
+- **Output:** Working code + execution-log entries
 - **Next:** Phase 5
 
 ### Phase 5: Completion

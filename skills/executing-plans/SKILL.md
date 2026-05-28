@@ -53,6 +53,8 @@ That config defines:
 **Do not silently replace the configured review mode with a heavier one.**
 If the config says task-level review is off, use the self-checklist and move on unless deviation escalation is triggered.
 
+**Self-checklist is an explicit task step, not a log section.** The plan's Step 5 (Run self-checklist) must be executed and produce `✅` / `❌` / `N/A` for every item. If any item is `❌`, stop immediately, surface it to the human partner, and do not write the execution-log block until the issue is resolved or explicitly deferred. The execution-log's `Review (self-checklist)` block only records what Step 5 already produced — never use it as a substitute for running the check.
+
 ## When to Stop and Ask for Help
 
 **STOP executing immediately when:**

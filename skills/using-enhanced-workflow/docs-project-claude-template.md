@@ -8,7 +8,7 @@ This project uses the Enhanced Superpowers workflow. The following rules are MAN
 
 1. **Before writing ANY code**, invoke `brainstorming` skill (Superpowers). No exceptions.
 2. **Before executing**, invoke `writing-plans` skill (Superpowers). No exceptions.
-3. **After each task commit**, invoke `documenting-execution` skill.
+3. **After each task completes**, invoke `documenting-execution` skill.
 4. **After each verification run**, invoke `documenting-verification` skill.
 5. **After each code review cycle**, invoke `documenting-review` skill.
 6. **If review finds issues, fix them, run verification, then prefer the original reviewer for re-check.** If the original reviewer is unavailable or still lacks context after a concise recap, fall back to a fresh reviewer.
@@ -24,7 +24,6 @@ This project uses the Enhanced Superpowers workflow. The following rules are MAN
 - Do NOT skip verification before re-review.
 - Do NOT replace re-review with implementer self-assertion. Prefer the original reviewer; use a fresh reviewer only as fallback.
 - Do NOT merge or create PR before the completion summary is written.
-- Do NOT leave documentation updates uncommitted at session end.
 
 ### Documentation
 

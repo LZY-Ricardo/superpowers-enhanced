@@ -42,7 +42,7 @@ This structure informs the task decomposition. Each task should produce self-con
 - "Run it to make sure it fails" — step
 - "Implement the minimal behavior" — step
 - "Run the tests and make sure they pass" — step
-- "Commit" — step
+- "Run the self-checklist" — step
 - "Write the merged execution-log block" — step
 
 ## Plan Document Header
@@ -129,19 +129,23 @@ Expected: concrete failure reason
 Run: `exact command`
 Expected: concrete pass result
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 5: Run self-checklist**
 
-```bash
-git add exact/file paths
-git commit -m "type: concise message"
-```
+Produce `✅` / `❌` / `N/A` plus a one-line note for every item below. If ANY item is `❌`, stop here, write a debugging-log entry (or inline note when the issue is small), and report to the human partner before continuing. Do not advance to Step 6 while an unresolved `❌` exists.
+
+- [ ] Spec mapping —
+- [ ] Interface consistency —
+- [ ] Tests verify behavior —
+- [ ] Smell scan —
+- [ ] Spec-stated boundaries covered —
+- [ ] Plan deviation check —
 
 - [ ] **Step 6: Write the merged execution-log block**
 
 Append one task block to:
 `docs/superpowers/execution-log/YYYY-MM-DD-<feature-name>.md`
 
-The block must contain:
+The block records the outcomes already produced in Steps 1-5. It does **not** re-run the checklist.
 
 ```markdown
 ## Task N: [Task Name]
@@ -152,13 +156,13 @@ The block must contain:
 **Verification**
 - Exact commands run and actual PASS/FAIL outcomes.
 
-**Review (self-checklist)**
-- Spec mapping
-- Interface consistency
-- Tests verify behavior
-- Smell scan
-- Spec-stated boundaries covered
-- Plan deviation check
+**Review (self-checklist)** — record the ✅/❌/N/A produced in Step 5
+- Spec mapping: [result + note]
+- Interface consistency: [result + note]
+- Tests verify behavior: [result + note]
+- Smell scan: [result + note]
+- Spec-stated boundaries covered: [result + note]
+- Plan deviation check: [result + note]
 
 **Review (applied config)**
 - What the review-config required for this task
@@ -185,7 +189,7 @@ Every step must contain the actual content an engineer needs. These are **plan f
 - Concrete failing tests always
 - Implementation steps should be **skeleton + key snippets** by default, not final-file dumps
 - Exact commands with expected output
-- DRY, YAGNI, TDD, frequent commits
+- DRY, YAGNI, TDD
 - Default execution is inline unless there is a real reason to pay for task isolation
 
 ## Self-Review
@@ -212,13 +216,68 @@ After saving the plan, offer execution choice:
 
 **2. Subagent-Driven** — Use `superpowers:subagent-driven-development` only if task isolation is worth the cost
 
-**Review strategy (configure once for the whole feature):**
-- Task-level review: Off / Spec only / Spec + code
-- Feature-level review: Spec only / Code only / Spec + code
-- Review executor: Main session / Subagent / Hybrid
+**Review strategy (configure once for the whole feature).**
+
+**Present this in the user's spoken language. When the user is communicating in Chinese, use the Chinese template below verbatim — do not just list bare option names without explanation.**
+
+---
+
+**Chinese template (use as-is when the user speaks Chinese):**
+
+```
+Review 策略（一次配置整个 feature，三个维度组合决定成本与覆盖）
+
+1. Task-level review — 每个任务完成后是否做外部 review
+   - Off（默认推荐）：仅跑 self-checklist，最便宜；适合改动可预测、有测试兜底
+   - Spec only：每任务结束检查"是否实现了 spec 要求"，不审代码细节；中等成本
+   - Spec + code：完整 review（spec 对齐 + 代码质量），成本最高，适合高风险或新人主导
+
+2. Feature-level review — 整个 feature 收口时做一次的 review（至少保留一个维度）
+   - Spec only：只检查最终交付是否覆盖 spec
+   - Code only：只看代码质量 / 可读性 / 风险
+   - Spec + code（默认推荐）：两维都做，最稳
+
+3. Review executor — 由谁执行 review
+   - Main session：当前会话自审；最省 token，但容易自我盲区
+   - Subagent：派子代理独立 review；隔离上下文偏见，token 成本最高
+   - Hybrid（默认推荐）：task-level 用主会话自检，feature-level 派子代理；性价比最高
+
+默认组合：Task-level Off + Feature-level Spec+code + Hybrid
+（日常 self-checklist 控成本，feature 收口用子代理保质量）
+
+请回复你想要的组合，或说"用默认值"。
+```
+
+**English equivalent (use when the user speaks English):**
+
+```
+Review strategy (configure once per feature — three dimensions combine into cost vs coverage)
+
+1. Task-level review — external review after each task
+   - Off (recommended default): self-checklist only; cheapest, fits predictable changes with test coverage
+   - Spec only: each task checks "did I implement what spec asked for"; no code-quality audit
+   - Spec + code: full review (spec alignment + code quality); highest cost, fits high-risk tasks
+
+2. Feature-level review — single review at feature closeout (must keep at least one dimension)
+   - Spec only: covers deliverable vs spec
+   - Code only: code quality / readability / risk
+   - Spec + code (recommended default): both dimensions, safest
+
+3. Review executor — who performs the review
+   - Main session: current session self-reviews; cheapest tokens, weakest at catching own blind spots
+   - Subagent: dispatch independent subagent; isolates context bias, highest token cost
+   - Hybrid (recommended default): main session for task-time self-check, subagent at feature closeout
+
+Default combination: Task-level Off + Feature-level Spec+code + Hybrid
+(self-checklist controls task-time cost; subagent guards quality at closeout)
+
+Reply with your choice, or "use default".
+```
+
+---
 
 **Hard rules:**
-- self-checklist always runs
+- self-checklist is an explicit task step (Step 5); any `❌` stops execution until the human partner is told
 - plan deviation triggers one escalation review regardless of task-level setting
 - feature-level review must keep at least one review dimension enabled
 - TDD failing-test step cannot be skipped

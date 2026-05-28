@@ -129,7 +129,7 @@ Implementer subagents report one of four statuses. Handle each appropriately:
 
 - Read the plan once at the beginning
 - Provide full task text directly to subagents; do not make them read files
-- Implementers still do self-review before reporting back
+- Implementers must run the plan's Step 5 self-checklist verbatim (the 6 items shipped with each task) and produce `✅`/`❌`/`N/A` per item before reporting back; any `❌` returns `BLOCKED` instead of `DONE`
 - Respect the review-config instead of assuming two-stage review for every task
 - If task-level external review is configured off, only run the self-checklist unless deviation escalation applies
 - Feature-level review still runs later if configured

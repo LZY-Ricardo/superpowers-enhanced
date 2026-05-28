@@ -19,7 +19,6 @@ Complete in order:
 4. **Write docs/superpowers/README.md** — detailed workflow reference
 5. **Write docs/superpowers/status.md** — live recovery entrypoint
 6. **Write docs/superpowers/version.json** — machine-readable workflow metadata
-7. **Commit** — commit the initialization separately from any code changes
 
 ## Step 2: Create Directory Structure
 
@@ -92,13 +91,6 @@ for key in ("initializedAt", "lastUpgradedAt"):
     template[key] = "$NOW_UTC"
 Path("docs/superpowers/version.json").write_text(json.dumps(template, indent=2) + "\n")
 PY
-```
-
-## Step 6: Commit
-
-```bash
-git add docs/superpowers/ CLAUDE.md
-git commit -m "chore: initialize Enhanced Superpowers workflow documentation structure"
 ```
 
 ## When to Re-Run

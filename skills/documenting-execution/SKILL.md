@@ -1,6 +1,6 @@
 ---
 name: documenting-execution
-description: Use when completing each task in plan execution, after code is committed. Records task status, verification, applied review strategy, and implementation decisions to a living execution log.
+description: Use when completing each task in plan execution. Records task status, verification, applied review strategy, and implementation decisions to a living execution log.
 ---
 
 # Documenting Execution
@@ -69,20 +69,19 @@ The default enhanced workflow writes **one merged block per task**. Do not split
 **Execution**
 - What was implemented
 - Key plan-vs-reality deviations (if any)
-- Commits created for the task
 
 **Verification**
 - Exact commands run
 - Actual PASS/FAIL outcomes
 - Any uncovered areas or intentional skips
 
-**Review (self-checklist)**
-- Spec mapping
-- Interface consistency
-- Tests verify behavior
-- Smell scan
-- Spec-stated boundaries covered
-- Plan deviation check
+**Review (self-checklist)** — record the ✅/❌/N/A outcomes produced in the plan's Step 5; the agent must not re-execute the checklist here
+- Spec mapping: [result + note]
+- Interface consistency: [result + note]
+- Tests verify behavior: [result + note]
+- Smell scan: [result + note]
+- Spec-stated boundaries covered: [result + note]
+- Plan deviation check: [result + note]
 
 **Review (applied config)**
 - What `review-config.md` required for this task
@@ -127,8 +126,6 @@ This means self-review checklist output stays in the execution log by default an
 | "I'll write execution now and verification later" | The default path is one merged task block after the task's execution/verification cycle closes. |
 | "This task went exactly as planned, so it doesn't need a log entry" | "As planned" is useful execution data — record it anyway. |
 | "Self-review belongs in review-log" | No. Self-review checklist stays in the execution log by default. |
+| "I'll skip the explicit Step 5 and just fill the checklist section in the log" | No. Step 5 is an executable task step with a stop-on-`❌` rule. The log section only records what Step 5 already produced. |
 | "I need a separate documenting skill call for every task sub-step" | No. The lightweight default uses one execution-log block per task. |
 
-## Git Integration
-
-Commit execution-log updates alongside the code changes or at a natural same-task checkpoint. Do not leave execution-log changes uncommitted at session end.
