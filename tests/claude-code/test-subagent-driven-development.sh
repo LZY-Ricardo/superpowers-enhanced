@@ -279,4 +279,22 @@ fi
 
 echo ""
 
+# Test 11: Writing-plans should recommend inline execution by default
+echo "Test 11: writing-plans execution default..."
+output=$(run_claude_or_fail "writing-plans execution default" "In the writing-plans skill, which execution mode is the default recommendation now: Inline Execution or Subagent-Driven? Answer briefly." 120)
+
+if assert_contains "$output" "Inline Execution\|inline execution\|inline by default\|default.*inline" "writing-plans recommends inline execution"; then
+    :
+else
+    exit 1
+fi
+
+if assert_not_contains "$output" "Subagent-Driven \(recommended\)\|Subagent-Driven is recommended\|subagent-driven.*default" "writing-plans does not present subagent-driven as the default"; then
+    :
+else
+    exit 1
+fi
+
+echo ""
+
 echo "=== All subagent-driven-development skill tests passed ==="

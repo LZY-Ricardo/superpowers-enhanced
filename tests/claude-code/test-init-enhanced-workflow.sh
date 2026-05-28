@@ -244,6 +244,11 @@ else
       && cmp -s "$WORKFLOW_TEMPLATE" "$behavior_test_dir/docs/superpowers/workflow.md" \
       && cmp -s "$CONVENTIONS_TEMPLATE" "$behavior_test_dir/docs/superpowers/conventions.md" \
       && cmp -s "$STATUS_TEMPLATE" "$behavior_test_dir/docs/superpowers/status.md"; then
+      grep -q 'review-config' "$behavior_test_dir/docs/superpowers/README.md" || FAILED=$((FAILED + 1))
+      grep -q 'review-config' "$behavior_test_dir/docs/superpowers/workflow.md" || FAILED=$((FAILED + 1))
+      grep -q 'merged execution-log block' "$behavior_test_dir/docs/superpowers/conventions.md" || FAILED=$((FAILED + 1))
+      grep -q 'dashboard' "$behavior_test_dir/docs/superpowers/conventions.md" || FAILED=$((FAILED + 1))
+      grep -q 'Current review config' "$behavior_test_dir/docs/superpowers/status.md" || FAILED=$((FAILED + 1))
       plugin_version="$(python3 - <<PY
 import json
 from pathlib import Path

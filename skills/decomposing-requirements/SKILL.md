@@ -46,13 +46,14 @@ digraph when_to_use {
 **Use when:**
 - Requirement mentions 3+ distinct features or subsystems
 - Request is vague ("build a platform", "redesign the system")
-- You're unsure where to start
+- You're unsure where to start because the requirement is structurally broad, not merely because it has several steps
 - User asks "how should we approach this?"
-- Brainstorming skill flags that the project needs decomposition
+- Brainstorming reveals multiple independent concerns with different boundaries
 
 **Don't use when:**
 - Single, well-scoped feature or bugfix
 - Requirement fits in one brainstorming session
+- The work is medium-sized but still one coherent concern
 
 ## Checklist
 
@@ -150,18 +151,16 @@ This ensures brainstorming doesn't re-explore what decomposition already decided
 - **YAGNI at the macro level** — sub-projects that aren't needed get cut, not deferred
 - **One question at a time** — don't overwhelm with a form to fill out
 - **Honest about unknowns** — flag what you don't know, don't fake estimates
+- **Early exit is a success** — if it is really one concern, go straight to brainstorming
 
 ## Red Flags
 
 | Thought | Reality |
 |---------|---------|
-| "This is small enough to skip decomposition" | Multiple concerns = multiple sub-projects, regardless of perceived size |
-| "I can just start brainstorming the first piece" | Without decomposition, you'll miss dependencies and rework |
-| "Let me just plan the whole thing as one" | Large plans fail. Small plans succeed. Decompose first. |
-| "The human partner will figure out the order" | Your job is to make the structure visible. Do it. |
-| "Dependencies don't matter for planning" | Wrong order = blocked tasks = wasted time. |
-| "I can estimate complexity accurately" | Without design, estimates are guesses. Flag risks instead. |
-| "Forcing a split to justify using this skill" | If it's really one concern, exit early and go to brainstorming. |
+| "This is small enough to skip decomposition" | Multiple concerns = multiple sub-projects, regardless of perceived size. |
+| "The task is non-trivial, so decomposition must be right" | Non-trivial is not the same as multi-concern. One coherent concern should go straight to brainstorming. |
+| "I can just start brainstorming the first piece" | Without decomposition, you'll miss dependencies and rework when there are truly multiple independent concerns. |
+| "Forcing a split will make the workflow look more rigorous" | False. If it's really one concern, exit early and move on. |
 
 ## After Decomposition
 

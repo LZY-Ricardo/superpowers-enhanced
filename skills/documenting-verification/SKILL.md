@@ -1,6 +1,6 @@
 ---
 name: documenting-verification
-description: Use after running any verification command — tests, build, lint, type-check. Records what was verified, results, and gaps so nothing is assumed to pass without evidence.
+description: Use after running verification commands — tests, build, lint, type-check, or manual checks. Records what was verified, results, and gaps so nothing is assumed to pass without evidence.
 ---
 
 # Documenting Verification
@@ -10,10 +10,6 @@ Record verification results as structured evidence. Complements the verification
 **Core principle:** Verification without a record is unverifiable.
 
 **Announce at start:** "I'm using the documenting-verification skill to record verification results."
-
-## Auto-Init
-
-If `docs/superpowers/` does not exist, create the full directory structure. See documenting-execution's Auto-Init section for the commands.
 
 ## When to Use
 
@@ -28,59 +24,54 @@ If `docs/superpowers/` does not exist, create the full directory structure. See 
 - No verification was actually run
 - Only exploring, not asserting correctness
 
-## Output Location
+## Default Output Location
 
-**Always append to the feature's execution log:** `docs/superpowers/execution-log/YYYY-MM-DD-<feature-name>.md`
+**Append verification into the current task's merged execution-log block:**
+`docs/superpowers/execution-log/YYYY-MM-DD-<feature-name>.md`
 
-If no execution log exists yet (e.g., standalone verification), create: `docs/superpowers/verification-log/YYYY-MM-DD-<feature-name>.md`
+This workflow's default is **not** a separate verification subsection appended later. Verification evidence belongs inside the task block produced at task closeout.
 
-## Log Entry Format
+Standalone verification-only files are exceptional and should be used only when there is no plan-driven execution log yet.
+
+## Verification Content Standard
+
+For the `**Verification**` section of the merged task block, record:
 
 ```markdown
-#### Verification — [Task N or Phase]
+**Verification**
+- `exact command` → PASS/FAIL with the actual observed outcome
+- `exact command` → PASS/FAIL with the actual observed outcome
+- Uncovered areas or deliberate skips, if any
+```
 
-**Timestamp:** YYYY-MM-DD HH:MM
+Examples:
 
-| Check | Command | Result | Notes |
-|-------|---------|--------|-------|
-| Tests | `pytest tests/` | 34/34 PASS | — |
-| Build | `npm run build` | PASS | exit 0 |
-| Lint | `eslint src/` | 2 warnings | unused vars in utils.ts |
-| Type check | `tsc --noEmit` | SKIPPED | project has no typecheck step |
-
-**Uncovered areas:** *(if any)*
-- [What wasn't verified and why]
-
-**Action items from failures:** *(if any)*
-- [What needs fixing → may trigger documenting-debugging]
-
----
+```markdown
+**Verification**
+- `bash tests/claude-code/test-init-enhanced-workflow.sh` → PASS
+- `bash tests/claude-code/test-status-surface.sh` → FAIL before status-template alignment; expected for current task slice
+- Uncovered: full integration suite deferred to end-to-end verification task
 ```
 
 ## Failure Handling
 
 When verification fails:
-1. Record the failure in this log
-2. Invoke **documenting-debugging** after resolving the failure
-3. Record the re-verification result as a new entry after fix
-
-```
-Verification (FAIL) → debugging-debugging → Fix → Verification (PASS)
-```
-
-## Key Principles
-
-- **Record facts, not feelings** — "34/34 PASS" not "seems good"
-- **Record skips too** — skipped verification is a known risk gap
-- **Tie to task** — verification belongs to a specific task or phase
-- **Failures become action items** — don't just record failure, state what needs fixing
-- **One location** — prefer appending to execution log over creating a separate file
+1. Record the failure in the task's `Verification` section
+2. Fix it or investigate it
+3. If the investigation has standalone reuse value, create a debugging-log entry
+4. Re-run verification and record the new result in the same task-closeout cycle or in the follow-up task block, depending on when the fix lands
 
 ## Relationship to Other Skills
 
-- **verification-before-completion** enforces running verification
-- **documenting-verification** records the result
-- **documenting-debugging** is triggered when verification fails and needs investigation
-- **documenting-review** records issues found by code review (separate from this)
+- **verification-before-completion** enforces that verification really happens
+- **documenting-verification** defines how to record the result
+- **documenting-debugging** is used when a failure turns into a meaningful investigation
+- **documenting-review** is for external review findings, not self-check verification notes
 
-Run verification-before-completion first, then this skill to record.
+## Key Principles
+
+- **Record facts, not feelings** — "34/34 PASS" or "FAIL: missing field" rather than "looks good"
+- **Record skips too** — skipped checks are known risk gaps
+- **Verification belongs to a task** — by default it should be attached to the task block that produced it
+- **Failures create evidence and action** — don't just note failure; make the next step obvious
+- **Prefer one location** — merged execution-log block first, separate files only when truly necessary

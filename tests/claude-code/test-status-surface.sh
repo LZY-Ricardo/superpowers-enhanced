@@ -25,6 +25,7 @@ grep -q 'docs/superpowers/status.md' "$INIT_SKILL" || FAILED=$((FAILED + 1))
 RUNTIME_SKILL="$PLUGIN_DIR/skills/using-enhanced-workflow/SKILL.md"
 README_DOC="$PLUGIN_DIR/docs/superpowers/README.md"
 grep -q 'status.md' "$RUNTIME_SKILL" || FAILED=$((FAILED + 1))
+grep -q 'review-config' "$RUNTIME_SKILL" || FAILED=$((FAILED + 1))
 grep -q 'status.md' "$README_DOC" || FAILED=$((FAILED + 1))
 
 STATUS_DOC="$PLUGIN_DIR/docs/superpowers/status.md"

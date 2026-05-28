@@ -40,20 +40,24 @@ grep -q 'next sub-project changes' "$SKILL_FILE" || FAILED=$((FAILED + 1))
 echo "Test 7: skill defines main-session ownership..."
 grep -q 'maintained by the \*\*main session\*\*' "$SKILL_FILE" || FAILED=$((FAILED + 1))
 
-echo "Test 8: active decomposition doc includes overview table..."
+echo "Test 8: skill preserves stronger early-exit behavior..."
+grep -q 'Early exit is a success' "$SKILL_FILE" || FAILED=$((FAILED + 1))
+grep -q 'Single, well-scoped feature or bugfix' "$SKILL_FILE" || FAILED=$((FAILED + 1))
+
+echo "Test 9: active decomposition doc includes overview table..."
 DOC_FILE="$PLUGIN_DIR/docs/superpowers/decomposition/2026-05-25-workflow-engineering-upgrade.md"
 grep -q '## Sub-project Overview' "$DOC_FILE" || FAILED=$((FAILED + 1))
 
-echo "Test 9: active decomposition doc includes Status field..."
+echo "Test 10: active decomposition doc includes Status field..."
 grep -q '\*\*Status:\*\*' "$DOC_FILE" || FAILED=$((FAILED + 1))
 
-echo "Test 10: active decomposition doc includes Priority field..."
+echo "Test 11: active decomposition doc includes Priority field..."
 grep -q '\*\*Priority:\*\*' "$DOC_FILE" || FAILED=$((FAILED + 1))
 
-echo "Test 11: active decomposition doc includes Next Step field..."
+echo "Test 12: active decomposition doc includes Next Step field..."
 grep -q '\*\*Next Step:\*\*' "$DOC_FILE" || FAILED=$((FAILED + 1))
 
-echo "Test 12: active decomposition doc is usable as a macro map..."
+echo "Test 13: active decomposition doc is usable as a macro map..."
 grep -q '| A 模板与真相源收敛 | Completed |' "$DOC_FILE" || FAILED=$((FAILED + 1))
 grep -q '| B 项目版本标识与升级机制 | Completed |' "$DOC_FILE" || FAILED=$((FAILED + 1))
 grep -q '| G 分解文档状态追踪增强 | In Progress\|Completed |' "$DOC_FILE" || FAILED=$((FAILED + 1))

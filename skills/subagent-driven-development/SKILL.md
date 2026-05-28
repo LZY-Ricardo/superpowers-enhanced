@@ -1,21 +1,15 @@
 ---
 name: subagent-driven-development
-description: Use when executing implementation plans with independent tasks in the current session
+description: Use when executing implementation plans whose tasks are independent enough that task isolation is worth the cost in the current session.
 ---
 
 # Subagent-Driven Development
 
-Execute plan by dispatching fresh subagent per task, with two-stage review after each: spec compliance review first, then code quality review.
+Execute a plan by dispatching fresh subagents for tasks whose isolation is worth the extra cost. This is an optional execution mode, not the default enhanced workflow path.
 
-<!-- ENHANCED: reviewer-continuity-loop -->
-**Enhanced review loop:** When a reviewer finds issues, the implementer/fix subagent makes the changes, the main session runs verification, then re-review is requested. Prefer continuing with the original reviewer for that finding set; if that reviewer is unavailable or no longer has enough context even after a concise recap, fall back to a fresh reviewer. The re-review must explicitly check whether each prior finding is fixed, partially fixed, still broken, or replaced by a new issue.
-<!-- /ENHANCED: reviewer-continuity-loop -->
+**Core principle:** Use fresh task isolation only when the payoff is real. Inline execution is the normal path; subagents are for cases where independence, reviewer separation, or context control justifies them.
 
-**Why subagents:** You delegate tasks to specialized agents with isolated context. By precisely crafting their instructions and context, you ensure they stay focused and succeed at their task. They should never inherit your session's context or history — you construct exactly what they need. This also preserves your own context for coordination work.
-
-**Core principle:** Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration
-
-**Continuous execution:** Do not pause to check in with your human partner between tasks. Execute all tasks from the plan without stopping. The only reasons to stop are: BLOCKED status you cannot resolve, ambiguity that genuinely prevents progress, or all tasks complete. "Should I continue?" prompts and progress summaries waste their time — they asked you to execute the plan, so execute it.
+**Continuous execution:** Do not pause to check in with your human partner between tasks unless blocked, the plan is ambiguous, or all tasks are complete.
 
 ## When to Use
 
@@ -23,25 +17,45 @@ Execute plan by dispatching fresh subagent per task, with two-stage review after
 digraph when_to_use {
     "Have implementation plan?" [shape=diamond];
     "Tasks mostly independent?" [shape=diamond];
-    "Stay in this session?" [shape=diamond];
+    "Isolation worth the cost?" [shape=diamond];
     "subagent-driven-development" [shape=box];
     "executing-plans" [shape=box];
     "Manual execution or brainstorm first" [shape=box];
 
     "Have implementation plan?" -> "Tasks mostly independent?" [label="yes"];
     "Have implementation plan?" -> "Manual execution or brainstorm first" [label="no"];
-    "Tasks mostly independent?" -> "Stay in this session?" [label="yes"];
-    "Tasks mostly independent?" -> "Manual execution or brainstorm first" [label="no - tightly coupled"];
-    "Stay in this session?" -> "subagent-driven-development" [label="yes"];
-    "Stay in this session?" -> "executing-plans" [label="no - parallel session"];
+    "Tasks mostly independent?" -> "Isolation worth the cost?" [label="yes"];
+    "Tasks mostly independent?" -> "executing-plans" [label="no - tightly coupled"];
+    "Isolation worth the cost?" -> "subagent-driven-development" [label="yes"];
+    "Isolation worth the cost?" -> "executing-plans" [label="no"];
 }
 ```
 
-**vs. Executing Plans (parallel session):**
-- Same session (no context switch)
-- Fresh subagent per task (no context pollution)
-- Two-stage review after each task: spec compliance first, then code quality
-- Faster iteration (no human-in-loop between tasks)
+**Use this when:**
+- tasks are truly independent
+- task-local context isolation is valuable
+- you want an independent reviewer perspective and it is worth paying for
+- the plan explicitly calls for subagent execution
+
+**Prefer `executing-plans` when:**
+- tasks are tightly coupled
+- the main session already has the needed context
+- the plan's lightweight default is sufficient
+- you do not need isolated task workers
+
+## Review Config Requirement
+
+Before dispatching any implementer or reviewer subagent:
+1. **Read the implementation plan once** at the beginning
+2. Read the plan's `review-config.md`
+3. Extract the task list from the plan and pass the relevant review-config requirements into each subagent prompt
+
+Subagents must not silently revert to the workflow's old heavy defaults. The controller must tell them:
+- whether task-level external review is on or off
+- whether feature-level review is deferred to the end
+- whether escalation is required due to deviation
+
+If a task uses two-stage external review, **spec compliance review comes first and code quality review comes second**. Do not start code quality review before spec compliance concerns are resolved.
 
 ## The Process
 
@@ -49,51 +63,35 @@ digraph when_to_use {
 digraph process {
     rankdir=TB;
 
-    subgraph cluster_per_task {
-        label="Per Task";
-        "Dispatch implementer subagent (./implementer-prompt.md)" [shape=box];
-        "Implementer subagent asks questions?" [shape=diamond];
-        "Answer questions, provide context" [shape=box];
-        "Implementer subagent implements, tests, commits, self-reviews" [shape=box];
-        "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" [shape=box];
-        "Spec reviewer subagent confirms code matches spec?" [shape=diamond];
-        "Implementer subagent fixes spec gaps" [shape=box];
-        "Main session runs verification" [shape=box];
-        "Re-dispatch original spec reviewer if available; otherwise fresh reviewer" [shape=box];
-        "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [shape=box];
-        "Code quality reviewer subagent approves?" [shape=diamond];
-        "Implementer subagent fixes quality issues" [shape=box];
-        "Re-dispatch original quality reviewer if available; otherwise fresh reviewer" [shape=box];
-        "Mark task complete in TodoWrite" [shape=box];
-    }
-
-    "Read plan, extract all tasks with full text, note context, create TodoWrite" [shape=box];
+    "Read plan once + read review-config + create task tracking" [shape=box];
     "More tasks remain?" [shape=diamond];
-    "Dispatch final code reviewer subagent for entire implementation" [shape=box];
-    "Use superpowers:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
+    "Dispatch implementer subagent with full task text + review-config" [shape=box];
+    "Implementer needs context?" [shape=diamond];
+    "Answer questions / provide context" [shape=box];
+    "Implementer completes task + tests + self-review" [shape=box];
+    "Did task deviate or config require task-level external review?" [shape=diamond];
+    "Dispatch configured reviewer(s)" [shape=box];
+    "Fix findings + re-verify + re-check as required" [shape=box];
+    "Write merged execution-log block" [shape=box];
+    "Feature complete?" [shape=diamond];
+    "Run configured feature-level review" [shape=box];
+    "Use finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
 
-    "Read plan, extract all tasks with full text, note context, create TodoWrite" -> "Dispatch implementer subagent (./implementer-prompt.md)";
-    "Dispatch implementer subagent (./implementer-prompt.md)" -> "Implementer subagent asks questions?";
-    "Implementer subagent asks questions?" -> "Answer questions, provide context" [label="yes"];
-    "Answer questions, provide context" -> "Dispatch implementer subagent (./implementer-prompt.md)";
-    "Implementer subagent asks questions?" -> "Implementer subagent implements, tests, commits, self-reviews" [label="no"];
-    "Implementer subagent implements, tests, commits, self-reviews" -> "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)";
-    "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" -> "Spec reviewer subagent confirms code matches spec?";
-    "Spec reviewer subagent confirms code matches spec?" -> "Implementer subagent fixes spec gaps" [label="no"];
-    "Implementer subagent fixes spec gaps" -> "Main session runs verification" [label="fix"];
-    "Main session runs verification" -> "Re-dispatch original spec reviewer if available; otherwise fresh reviewer" [label="verified"];
-    "Re-dispatch original spec reviewer if available; otherwise fresh reviewer" -> "Spec reviewer subagent confirms code matches spec?" [label="re-review"];
-    "Spec reviewer subagent confirms code matches spec?" -> "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [label="yes"];
-    "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" -> "Code quality reviewer subagent approves?";
-    "Code quality reviewer subagent approves?" -> "Implementer subagent fixes quality issues" [label="no"];
-    "Implementer subagent fixes quality issues" -> "Main session runs verification" [label="fix"];
-    "Main session runs verification" -> "Re-dispatch original quality reviewer if available; otherwise fresh reviewer" [label="verified"];
-    "Re-dispatch original quality reviewer if available; otherwise fresh reviewer" -> "Code quality reviewer subagent approves?" [label="re-review"];
-    "Code quality reviewer subagent approves?" -> "Mark task complete in TodoWrite" [label="yes"];
-    "Mark task complete in TodoWrite" -> "More tasks remain?";
-    "More tasks remain?" -> "Dispatch implementer subagent (./implementer-prompt.md)" [label="yes"];
-    "More tasks remain?" -> "Dispatch final code reviewer subagent for entire implementation" [label="no"];
-    "Dispatch final code reviewer subagent for entire implementation" -> "Use superpowers:finishing-a-development-branch";
+    "Read plan once + read review-config + create task tracking" -> "Dispatch implementer subagent with full task text + review-config";
+    "Dispatch implementer subagent with full task text + review-config" -> "Implementer needs context?";
+    "Implementer needs context?" -> "Answer questions / provide context" [label="yes"];
+    "Answer questions / provide context" -> "Dispatch implementer subagent with full task text + review-config";
+    "Implementer needs context?" -> "Implementer completes task + tests + self-review" [label="no"];
+    "Implementer completes task + tests + self-review" -> "Did task deviate or config require task-level external review?";
+    "Did task deviate or config require task-level external review?" -> "Dispatch configured reviewer(s)" [label="yes"];
+    "Dispatch configured reviewer(s)" -> "Fix findings + re-verify + re-check as required";
+    "Fix findings + re-verify + re-check as required" -> "Write merged execution-log block";
+    "Did task deviate or config require task-level external review?" -> "Write merged execution-log block" [label="no"];
+    "Write merged execution-log block" -> "More tasks remain?";
+    "More tasks remain?" -> "Dispatch implementer subagent with full task text + review-config" [label="yes"];
+    "More tasks remain?" -> "Feature complete?" [label="no tasks left"];
+    "Feature complete?" -> "Run configured feature-level review" [label="yes"];
+    "Run configured feature-level review" -> "Use finishing-a-development-branch";
 }
 ```
 
@@ -101,200 +99,65 @@ digraph process {
 
 Use the least powerful model that can handle each role to conserve cost and increase speed.
 
-**Mechanical implementation tasks** (isolated functions, clear specs, 1-2 files): use a fast, cheap model. Most implementation tasks are mechanical when the plan is well-specified.
-
-**Integration and judgment tasks** (multi-file coordination, pattern matching, debugging): use a standard model.
-
-**Architecture, design, and review tasks**: use the most capable available model.
-
-**Task complexity signals:**
-- Touches 1-2 files with a complete spec → cheap model
-- Touches multiple files with integration concerns → standard model
-- Requires design judgment or broad codebase understanding → most capable model
+- **Mechanical implementation tasks** → cheap/fast model
+- **Integration and judgment tasks** → standard model
+- **Architecture and independent review tasks** → most capable available model
 
 ## Handling Implementer Status
 
 Implementer subagents report one of four statuses. Handle each appropriately:
 
-**DONE:** Proceed to spec compliance review.
+**DONE:** Proceed according to review-config.
 
-**DONE_WITH_CONCERNS:** The implementer completed the work but flagged doubts. Read the concerns before proceeding. If the concerns are about correctness or scope, address them before review. If they're observations (e.g., "this file is getting large"), note them and proceed to review.
+**DONE_WITH_CONCERNS:** Read the concerns before deciding whether to review or escalate.
 
-**NEEDS_CONTEXT:** The implementer needs information that wasn't provided. Provide the missing context and re-dispatch.
+**NEEDS_CONTEXT:** Provide the missing context and re-dispatch.
 
-**BLOCKED:** The implementer cannot complete the task. Assess the blocker:
-1. If it's a context problem, provide more context and re-dispatch with the same model
-2. If the task requires more reasoning, re-dispatch with a more capable model
-3. If the task is too large, break it into smaller pieces
-4. If the plan itself is wrong, escalate to the human
-
-**Never** ignore an escalation or force the same model to retry without changes. If the implementer said it's stuck, something needs to change.
+**BLOCKED:** Assess the blocker:
+1. context problem → provide more context and retry
+2. task requires more reasoning → upgrade model
+3. task too large → split it further
+4. plan itself wrong → escalate to the human partner
 
 ## Prompt Templates
 
-- `./implementer-prompt.md` - Dispatch implementer subagent
-- `./spec-reviewer-prompt.md` - Dispatch spec compliance reviewer subagent
-- `./code-quality-reviewer-prompt.md` - Dispatch code quality reviewer subagent
+- `./implementer-prompt.md` — Dispatch implementer subagent
+- `./spec-reviewer-prompt.md` — Dispatch spec compliance reviewer subagent when config or deviation requires it
+- `./code-quality-reviewer-prompt.md` — Dispatch code quality reviewer subagent when config or feature-level review requires it
 
-## Example Workflow
+## Key Rules
 
-```
-You: I'm using Subagent-Driven Development to execute this plan.
-
-[Read plan file once: docs/superpowers/plans/feature-plan.md]
-[Extract all 5 tasks with full text and context]
-[Create TodoWrite with all tasks]
-
-Task 1: Hook installation script
-
-[Get Task 1 text and context (already extracted)]
-[Dispatch implementation subagent with full task text + context]
-
-Implementer: "Before I begin - should the hook be installed at user or system level?"
-
-You: "User level (~/.config/superpowers/hooks/)"
-
-Implementer: "Got it. Implementing now..."
-[Later] Implementer:
-  - Implemented install-hook command
-  - Added tests, 5/5 passing
-  - Self-review: Found I missed --force flag, added it
-  - Committed
-
-[Dispatch spec compliance reviewer]
-Spec reviewer: ✅ Spec compliant - all requirements met, nothing extra
-
-[Get git SHAs, dispatch code quality reviewer]
-Code reviewer: Strengths: Good test coverage, clean. Issues: None. Approved.
-
-[Mark Task 1 complete]
-
-Task 2: Recovery modes
-
-[Get Task 2 text and context (already extracted)]
-[Dispatch implementation subagent with full task text + context]
-
-Implementer: [No questions, proceeds]
-Implementer:
-  - Added verify/repair modes
-  - 8/8 tests passing
-  - Self-review: All good
-  - Committed
-
-[Dispatch spec compliance reviewer]
-Spec reviewer: ❌ Issues:
-  - Missing: Progress reporting (spec says "report every 100 items")
-  - Extra: Added --json flag (not requested)
-
-[Implementer fixes issues]
-Implementer: Removed --json flag, added progress reporting
-
-[Main session runs verification]
-You: Tests pass, progress reporting verified
-
-[Original spec reviewer re-checks findings]
-Spec reviewer: ✅ Finding #1 fixed, Finding #2 fixed, no new spec issues
-
-[Dispatch code quality reviewer]
-Code reviewer: Strengths: Solid. Issues (Important): Magic number (100)
-
-[Implementer fixes]
-Implementer: Extracted PROGRESS_INTERVAL constant
-
-[Main session runs verification]
-You: Tests still pass after constant extraction
-
-[Original code reviewer re-checks finding]
-Code reviewer: ✅ Finding #1 fixed, approved
-
-[Mark Task 2 complete]
-
-...
-
-[After all tasks]
-[Dispatch final code-reviewer]
-Final reviewer: All requirements met, ready to merge
-
-Done!
-```
-
-## Advantages
-
-**vs. Manual execution:**
-- Subagents follow TDD naturally
-- Fresh context per task (no confusion)
-- Parallel-safe (subagents don't interfere)
-- Subagent can ask questions (before AND during work)
-
-**vs. Executing Plans:**
-- Same session (no handoff)
-- Continuous progress (no waiting)
-- Review checkpoints automatic
-
-**Efficiency gains:**
-- No file reading overhead (controller provides full text)
-- Controller curates exactly what context is needed
-- Subagent gets complete information upfront
-- Questions surfaced before work begins (not after)
-
-**Quality gates:**
-- Self-review catches issues before handoff
-- Two-stage review: spec compliance, then code quality
-- Review loops ensure fixes actually work
-- Spec compliance prevents over/under-building
-- Code quality ensures implementation is well-built
-
-**Cost:**
-- More subagent invocations (implementer + 2 reviewers per task)
-- Controller does more prep work (extracting all tasks upfront)
-- Review loops add iterations
-- But catches issues early (cheaper than debugging later)
+- Read the plan once at the beginning
+- Provide full task text directly to subagents; do not make them read files
+- Implementers still do self-review before reporting back
+- Respect the review-config instead of assuming two-stage review for every task
+- If task-level external review is configured off, only run the self-checklist unless deviation escalation applies
+- Feature-level review still runs later if configured
+- Never start implementation on main/master branch without explicit user consent
 
 ## Red Flags
 
 **Never:**
-- Start implementation on main/master branch without explicit user consent
-- Skip reviews (spec compliance OR code quality)
-- Proceed with unfixed issues
-- Dispatch multiple implementation subagents in parallel (conflicts)
-- Make subagent read plan file (provide full text instead)
-- Skip scene-setting context (subagent needs to understand where task fits)
-- Ignore subagent questions (answer before letting them proceed)
-- Accept "close enough" on spec compliance (spec reviewer found issues = not done)
-- Skip review loops (reviewer found issues = implementer fixes = review again)
-- Let implementer self-review replace actual review (both are needed)
-- **Start code quality review before spec compliance is ✅** (wrong order)
-- Move to next task while either review has open issues
-
-**If subagent asks questions:**
-- Answer clearly and completely
-- Provide additional context if needed
-- Don't rush them into implementation
+- present this skill as the default path when inline execution would do
+- ignore `review-config.md`
+- dispatch multiple implementation subagents in parallel against the same working tree
+- make subagents read the plan file instead of giving them the extracted task text
+- silently skip configured review or escalation behavior
+- assume every task must go through the same heavy two-stage review loop
 
 **If reviewer finds issues:**
-- Implementer (same subagent) fixes them
-- Main session runs verification before re-review
-- Prefer the original reviewer for the re-review
-- If the original reviewer is unavailable or still lacks context after a concise recap, dispatch a fresh reviewer
-- Re-review must classify each prior finding: VERIFIED_FIXED, PARTIALLY_FIXED, STILL_BROKEN, DEFERRED, or REJECTED
-- If re-review confirms old findings are fixed but discovers a new issue, record the old finding as fixed and the new issue as a new finding
-- Repeat until approved
-- Don't skip the re-review
-
-**If subagent fails task:**
-- Dispatch fix subagent with specific instructions
-- Don't try to fix manually (context pollution)
+- the implementer fixes the issues
+- re-verify before re-check
+- prefer the original reviewer when that continuity matters
+- use a fresh reviewer only when the original reviewer is unavailable or lacks context even after recap
 
 ## Integration
 
 **Required workflow skills:**
-- **superpowers:using-git-worktrees** - Ensures isolated workspace (creates one or verifies existing)
-- **superpowers:writing-plans** - Creates the plan this skill executes
-- **superpowers:requesting-code-review** - Code review template for reviewer subagents
-- **superpowers:finishing-a-development-branch** - Complete development after all tasks
-
-**Subagents should use:**
-- **superpowers:test-driven-development** - Subagents follow TDD for each task
+- **superpowers:using-git-worktrees** — Ensures isolated workspace when requested
+- **superpowers:writing-plans** — Creates the plan and review-config this skill executes
+- **superpowers:requesting-code-review** — Used when an external review cycle is configured
+- **superpowers:finishing-a-development-branch** — Completes development after all tasks
 
 **Alternative workflow:**
-- **superpowers:executing-plans** - Use for parallel session instead of same-session execution
+- **superpowers:executing-plans** — Default inline execution path

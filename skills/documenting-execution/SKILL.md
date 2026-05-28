@@ -1,6 +1,6 @@
 ---
 name: documenting-execution
-description: Use when completing each task in plan execution, after code is committed. Records task status, deviations from plan, and implementation decisions to a living execution log.
+description: Use when completing each task in plan execution, after code is committed. Records task status, verification, applied review strategy, and implementation decisions to a living execution log.
 ---
 
 # Documenting Execution
@@ -13,7 +13,7 @@ Append execution progress to a living log as each task completes. Creates a trac
 
 ## When to Use
 
-**After each task** in plan execution (executing-plans or subagent-driven-development):
+**After each task** in plan execution (`executing-plans` or `subagent-driven-development`):
 - Task completed successfully
 - Task blocked or skipped
 - Task deviated from plan
@@ -59,64 +59,76 @@ Create this header on first entry:
 ---
 ```
 
-## Log Entry Format
+## Default Entry Format
 
-Append one entry per task:
+The default enhanced workflow writes **one merged block per task**. Do not split execution, verification, and self-review into separate task-time entries unless a project has explicitly chosen a heavier workflow.
 
 ```markdown
-### Task N: [Task Name] — [Status]
+## Task N: [Task Name]
 
-**Status:** DONE | PARTIAL | BLOCKED | SKIPPED | DEVIATED
+**Execution**
+- What was implemented
+- Key plan-vs-reality deviations (if any)
+- Commits created for the task
 
-**Completed at:** YYYY-MM-DD HH:MM
+**Verification**
+- Exact commands run
+- Actual PASS/FAIL outcomes
+- Any uncovered areas or intentional skips
 
-**What was implemented:**
-[Brief description of actual implementation]
+**Review (self-checklist)**
+- Spec mapping
+- Interface consistency
+- Tests verify behavior
+- Smell scan
+- Spec-stated boundaries covered
+- Plan deviation check
 
-**Plan vs. Reality:** *(only if different from plan)*
-- Planned: [what the plan said]
-- Actual: [what was actually done]
-- Reason: [why it changed]
+**Review (applied config)**
+- What `review-config.md` required for this task
+- Whether task-level external review ran
+- Whether plan-deviation escalation was triggered
 
-**Decisions made:**
-- [Decision and brief reason, if any]
-
-**Commits:** `abc1234` [message] | `def5678` [message] *(list all commits for this task)*
-
-**Related debugging:** *(if applicable)*
-- → [link to debugging-log entry]
+**Debugging**
+- `N/A`, inline note, or link to standalone debugging-log entry
 
 ---
 ```
 
+## What Belongs Here vs Elsewhere
+
+- **Execution log (default):** the merged block above for every completed task
+- **Review log:** only for external review cycles, deferred findings, or cross-task findings worth tracking independently
+- **Debugging log:** only when the investigation itself has standalone reuse value
+
+This means self-review checklist output stays in the execution log by default and does **not** create a review-log entry by itself.
+
 ## Status Definitions
 
-| Status | Meaning |
-|--------|---------|
-| DONE | Implemented as planned, tests pass, committed |
-| PARTIAL | Some work committed, but blocked before completion |
-| BLOCKED | Cannot proceed at all, reason documented |
-| SKIPPED | Deliberately skipped, reason documented |
-| DEVIATED | Implemented differently from plan, reason documented |
+| Status shape | Meaning |
+|--------------|---------|
+| Normal merged block | Task completed and recorded in one place |
+| Blocked note inside merged block | Task stopped with a real blocker |
+| Deviation note inside merged block | Task intentionally diverged from plan and recorded why |
 
 ## Key Principles
 
-- **Append only** — never edit past entries
-- **Honest about deviations** — deviations aren't failures, they're valuable data for future planning
-- **Record why, not just what** — the reason behind a deviation is more useful than the deviation itself
-- **One entry per task** — don't batch multiple tasks into one entry
-- **List all commits** — a task may have multiple commits, list them all
-- **Cross-reference debugging** — if a task required debugging, link to the debugging-log entry
+- **Append only** — never edit past task blocks
+- **One merged block per task** — default path for the lightweight workflow
+- **Record why, not just what** — the reason behind a deviation matters more than the deviation itself
+- **List the actual verification evidence** — pass/fail is not assumed
+- **Apply the review config explicitly** — each task block should show how the configured review policy was used
+- **Cross-reference standalone debugging** — if a task required a reusable investigation, link it
 
 ## Red Flags
 
 | Thought | Reality |
 |---------|---------|
-| "I'll log after a few tasks" | Memory degrades fast. Log after each task. |
-| "This task went exactly as planned" | Record it anyway — "as planned" is useful data too |
-| "Nobody will read this" | Future-you and future-AI will. Deviations prevent repeated mistakes. |
-| "I'll just update the plan file" | Plan = intent. Log = reality. They serve different purposes. |
+| "I'll write execution now and verification later" | The default path is one merged task block after the task's execution/verification cycle closes. |
+| "This task went exactly as planned, so it doesn't need a log entry" | "As planned" is useful execution data — record it anyway. |
+| "Self-review belongs in review-log" | No. Self-review checklist stays in the execution log by default. |
+| "I need a separate documenting skill call for every task sub-step" | No. The lightweight default uses one execution-log block per task. |
 
 ## Git Integration
 
-Commit execution log updates alongside code changes, or in a separate documentation commit at natural checkpoints (after every 3-5 tasks, or after a review cycle). Do not leave execution log updates uncommitted at session end.
+Commit execution-log updates alongside the code changes or at a natural same-task checkpoint. Do not leave execution-log changes uncommitted at session end.

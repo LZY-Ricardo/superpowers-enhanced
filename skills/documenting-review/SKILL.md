@@ -1,52 +1,47 @@
 ---
 name: documenting-review
-description: Use after a code review cycle completes — whether findings were fixed, deferred, or rejected. Records issues found, actions taken, and deferred items so nothing is lost between review and resolution.
+description: Use after an external code review cycle completes — whether findings were fixed, deferred, or rejected. Records issues found, actions taken, and deferred items so nothing is lost between review and resolution.
 ---
 
 # Documenting Review
 
-Record code review findings and their resolution. Prevents review feedback from vanishing after the subagent session ends and creates an auditable trail of quality decisions.
+Record external review findings and their resolution. Prevents review feedback from vanishing after the reviewer session ends and creates an auditable trail of quality decisions.
 
-**Core principle:** Every review finding has a resolution. No finding is silently dropped.
+**Core principle:** Every external review finding has a resolution. No finding is silently dropped.
 
 **Announce at start:** "I'm using the documenting-review skill to record review findings."
 
-## Auto-Init
-
-If `docs/superpowers/` does not exist, create the full directory structure. See documenting-execution's Auto-Init section for the commands.
-
 ## When to Use
 
-**After each code review cycle:**
-- Spec compliance review (in subagent-driven-development)
-- Code quality review (in subagent-driven-development)
+**Use this only after an external review cycle:**
+- Spec compliance review by a reviewer other than the implementer
+- Code quality review by a reviewer other than the implementer
 - External PR review
 - Manual review by your human partner
 
 **Don't use when:**
-- Only self-review (no external reviewer involved)
-- No findings at all — still record a one-liner: "Clean review, no issues"
+- Only the task's self-review checklist ran
+- No independent external review cycle happened
+
+A clean self-review checklist belongs in the execution log, not the review log. If an external review cycle did happen, a clean "no issues found" record still belongs in the review log.
 
 ## Output Location
 
 `docs/superpowers/review-log/YYYY-MM-DD-<feature-name>.md`
 
-Use the same `<feature-name>` as the execution log. One file per feature. Append entries as review cycles complete.
+Use the same `<feature-name>` as the execution log. One file per feature. Append entries as external review cycles complete.
 
-## Review Flow in Subagent-Driven Development
+## Default Lightweight Behavior
 
-Spec compliance review and code quality review are **sequential, not parallel:**
+In the lightweight workflow, **review-log is not the default home for every task's review data**.
 
-```
-Implementer → Spec Review → (fix if needed) → Verification → Re-check (prefer same reviewer) → Quality Review → (fix if needed) → Verification → Re-check (prefer same reviewer) → Done
-```
+Use `review-log` only for:
+- external review cycles
+- deferred findings
+- rejected findings with evidence
+- cross-task findings that need tracking beyond the current task block
 
-Record each as a separate review cycle in this log. Spec review must pass before quality review begins.
-
-For re-check cycles:
-- Prefer the original reviewer for the finding set
-- If the original reviewer is unavailable, or still lacks enough context after a concise recap, use a fresh reviewer
-- Re-check cycles must explicitly say which prior cycle they are closing or re-evaluating
+If the configured review strategy keeps task-level external review off and only self-checklist runs, no review-log entry is needed.
 
 ## Log Entry Format
 
@@ -57,112 +52,38 @@ For re-check cycles:
 **Reviewer type:** SPEC_COMPLIANCE | CODE_QUALITY | PR_REVIEW | MANUAL
 **Reviewer:** subagent / external reviewer / human partner
 **Scope:** Task N [task name] / Full implementation
-**Preceded by:** *(if applicable)* Review Cycle N-1 (spec compliance passed)
-**Re-check of:** *(if applicable)* Review Cycle N-1
-**Original reviewer:** [reviewer who raised the finding set]
-**Re-check reviewer:** [same reviewer reused, fallback reviewer, or human partner]
+**Re-check of:** [prior cycle, if any]
 
 #### Findings
 
 | # | Severity | Description | Resolution | Re-check status | Commit | Cross-task? |
 |---|----------|-------------|------------|-----------------|--------|-------------|
-| 1 | CRITICAL | [What was found] | FIXED | VERIFIED_FIXED | abc1234 | — |
-| 2 | IMPORTANT | [What was found] | FIXED | PARTIALLY_FIXED | abc1234 | — |
-| 3 | IMPORTANT | [What was found] | DEFERRED | DEFERRED | — | — |
-| 4 | MINOR | [What was found] | REJECTED | REJECTED | — | — |
-| 5 | IMPORTANT | [What was found] | FIXED | VERIFIED_FIXED | abc1234 | Also affects Task 3, 5 |
-| 6 | IMPORTANT | [New issue found during re-check] | FIXED | NEW_FINDING | def5678 | — |
+| 1 | IMPORTANT | [What was found] | FIXED | VERIFIED_FIXED | abc1234 | — |
+| 2 | IMPORTANT | [What was found] | DEFERRED | DEFERRED | — | Task 5 |
+| 3 | MINOR | [What was found] | REJECTED | REJECTED | — | — |
 
-#### Re-check Summary *(for re-check cycles)*
+#### Deferred / Rejected Notes
+- Finding #2: reason, impact, prerequisite
+- Finding #3: evidence for rejection
 
-- **Finding #1:** [Verified fixed / still broken / partially fixed]
-- **Finding #2:** [Verified fixed / still broken / partially fixed]
-- **Fallback reason:** *(if a fresh reviewer was used)* [original reviewer unavailable / lacked context]
-- **Verification evidence reviewed:** [tests/build/lint/manual check summary]
-
-#### Deferred Items *(for each deferred finding)*
-
-**Finding #3:** [Description]
-- **Reason:** [Why it's deferred]
-- **Impact:** [What happens if not fixed]
-- **Prerequisite:** [What needs to happen before fixing]
-
-#### Rejected Items *(for each rejected finding)*
-
-**Finding #4:** [Description]
-- **Reason:** [Why reviewer's suggestion was rejected]
-- **Evidence:** [Technical justification]
-
-#### New Findings During Re-check *(if any)*
-
-**Finding #6:** [Description]
-- **Status of prior finding:** [old finding fixed, but new issue introduced]
-- **Action:** [fixed immediately / deferred / new task]
-
-#### Related Debugging *(if any findings required debugging)*
-- Finding #2 → [link to debugging-log entry]
+#### Related Debugging
+- Finding #1 → [link to debugging-log entry if one exists]
 
 ---
 ```
 
-## Severity Definitions
-
-| Severity | Meaning |
-|----------|---------|
-| CRITICAL | Breaks functionality or security — must fix before proceeding |
-| IMPORTANT | Quality or correctness issue — should fix before merge |
-| MINOR | Style, naming, small improvement — fix when convenient |
-
-## Resolution Definitions
-
-| Resolution | Meaning |
-|------------|---------|
-| FIXED | Issue addressed and closed after review/verification |
-| DEFERRED | Legitimate issue, postponed with documented reason |
-| REJECTED | Reviewer's suggestion not applicable, with documented reason |
-
-## Re-check Status Definitions
-
-| Re-check status | Meaning |
-|-----------------|---------|
-| OPEN | Finding has not been re-checked yet |
-| VERIFIED_FIXED | Reviewer confirmed the original finding is fixed |
-| PARTIALLY_FIXED | Some part of the finding was addressed, but not enough to close it |
-| STILL_BROKEN | Reviewer confirmed the finding is still not fixed |
-| DEFERRED | Finding remains intentionally postponed |
-| REJECTED | Finding was reviewed and rejected with evidence |
-| NEW_FINDING | Re-check fixed the old issue but exposed a new issue that must be tracked separately |
-
-## Cross-Task Findings
-
-If a review finding affects multiple tasks (e.g., a shared utility has a bug):
-- Mark the finding with the tasks it affects in the "Cross-task?" column
-- Fix it in the current task if possible
-- If the fix needs to happen in another task, note it as DEFERRED with the target task as prerequisite
-- When the fix happens in a later task, the re-check cycle must link back to the original cycle and original finding number
-
-## Edge Cases
-
-- **Verification passed, review still fails:** keep the finding open or mark it STILL_BROKEN. Verification evidence is required, but it does not overrule reviewer judgment.
-- **One fix addresses multiple findings:** keep one row per finding. Multiple findings may point to the same commit.
-- **Re-check discovers a new issue:** close the old finding only if fixed, then create a new finding row in the re-check cycle.
-- **Same finding exceeds 5 fix/re-check rounds:** escalate to the human partner.
-- **Original reviewer still exists but lacks context:** give a concise recap with original finding text, fix summary, and verification results; only then fall back to a fresh reviewer.
-
 ## Key Principles
 
-- **Every finding gets a row** — even clean reviews get "no issues found"
-- **Deferred items are first-class citizens** — they must include reason, impact, and prerequisite
-- **Rejected items need evidence** — "I don't want to" is not a reason
-- **Append only** — don't edit past review cycles
-- **Bidirectional cross-reference** — link to debugging-log if a finding required debugging, and link back
+- **Every external finding gets a row** — even a clean external review should record "no issues found" if a review cycle occurred
+- **Deferred items are first-class** — include reason, impact, and prerequisite
+- **Rejected items need evidence** — don't silently ignore reviewer suggestions
+- **Append only** — don't rewrite past review cycles
+- **Cross-task findings stay visible** — if an issue spans tasks, track it here
 
 ## Red Flags
 
 | Thought | Reality |
 |---------|---------|
-| "Review was clean, nothing to record" | "No issues" is valuable data — it means the area was verified |
-| "I'll fix the deferred items later" | Without a record, "later" becomes "never" |
-| "The reviewer was wrong, skip it" | Wrong = REJECTED with evidence. Silently dropping = dishonesty |
-| "This is just process overhead" | Review findings that vanish create the same bugs again |
-| "5 fix-review rounds, I'll stop recording" | Every round gets recorded. If rounds exceed 5, escalate to human partner. |
+| "The self-checklist already reviewed it, so no review distinction matters" | Self-checklist and external review are different artifacts. |
+| "Every task should create a review-log entry" | No. The lightweight default keeps routine review data inside the execution-log block unless an external review cycle occurred. |
+| "I'll fix the deferred items later without writing them down" | Without a review-log entry, deferred findings vanish. |
