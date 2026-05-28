@@ -247,7 +247,7 @@ else
     exit 1
 fi
 
-if assert_contains "$output" "read the plan itself\|full task text.*context\|not.*read.*plan file\|controller.*passes.*task\|dispatch.*full task text" "Doesn't make subagent read file"; then
+if assert_contains "$output" "read the plan itself\|full task text.*context\|not.*read.*plan file\|controller.*passes.*task\|dispatch.*full task text\|provide full task text directly\|do not make them read files\|giving them the extracted task text" "Doesn't make subagent read file"; then
     :
 else
     exit 1
