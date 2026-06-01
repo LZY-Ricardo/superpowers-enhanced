@@ -166,7 +166,6 @@ Recommended command-line update flow:
 
 ```text
 /plugin marketplace update superpowers-enhanced
-/plugin update superpowers@superpowers-enhanced
 /reload-plugins
 ```
 
@@ -178,7 +177,14 @@ You can also update from the UI:
 4. Choose **Update now**
 5. Run `/reload-plugins`
 
-If direct update behaves strangely, fall back to uninstall + install:
+If the marketplace update does not bump the installed plugin, try direct plugin update:
+
+```text
+/plugin update superpowers@superpowers-enhanced
+/reload-plugins
+```
+
+If direct update also behaves strangely, fall back to uninstall + install:
 
 ```text
 /plugin uninstall superpowers@superpowers-enhanced
@@ -194,8 +200,6 @@ Recommended update flow:
 codex plugin marketplace upgrade superpowers-enhanced
 codex plugin add superpowers@superpowers-enhanced
 ```
-
-This was verified to update the installed cache to a newer version without first removing the plugin.
 
 If Codex still loads old files, clear the plugin cache and re-install:
 

@@ -166,7 +166,6 @@ Claude 应该先触发需求拆分，再按子项目逐个推进。
 
 ```text
 /plugin marketplace update superpowers-enhanced
-/plugin update superpowers@superpowers-enhanced
 /reload-plugins
 ```
 
@@ -178,7 +177,14 @@ Claude 应该先触发需求拆分，再按子项目逐个推进。
 4. 选择 **Update now**
 5. 运行 `/reload-plugins`
 
-如果直接更新异常，再退回到卸载 + 安装：
+如果 marketplace update 没有更新已安装插件，可以尝试直接更新插件：
+
+```text
+/plugin update superpowers@superpowers-enhanced
+/reload-plugins
+```
+
+如果直接更新也异常，再退回到卸载 + 安装：
 
 ```text
 /plugin uninstall superpowers@superpowers-enhanced
@@ -195,9 +201,7 @@ codex plugin marketplace upgrade superpowers-enhanced
 codex plugin add superpowers@superpowers-enhanced
 ```
 
-这个流程已经实测可以把安装缓存更新到新版本，无需先 remove 插件。
-
-如果 Codex 仍然加载旧文件，清理插件缓存后重新安装：
+如果 Codex 仍然加载旧文件，清理插件缓存后重新安装:
 
 ```bash
 codex plugin remove superpowers@superpowers-enhanced
