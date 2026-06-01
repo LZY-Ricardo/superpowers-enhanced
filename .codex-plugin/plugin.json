@@ -22,10 +22,10 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Superpowers",
-    "shortDescription": "Planning, TDD, debugging, and delivery workflows for coding agents",
-    "longDescription": "Use Superpowers to guide agent work through brainstorming, implementation planning, test-driven development, systematic debugging, parallel execution, code review, and finish-the-branch workflows.",
-    "developerName": "Jesse Vincent",
+    "displayName": "Superpowers Enhanced",
+    "shortDescription": "Planning, TDD, debugging, documentation persistence, and delivery workflows for coding agents",
+    "longDescription": "Enhanced fork of Superpowers: brainstorming, implementation planning, test-driven development, systematic debugging, parallel execution, code review, finish-the-branch workflows, plus documentation persistence and requirement decomposition.",
+    "developerName": "Jesse Vincent (enhanced by LZY-Ricardo)",
     "category": "Coding",
     "capabilities": [
       "Interactive",

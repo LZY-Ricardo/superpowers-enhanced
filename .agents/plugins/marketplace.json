@@ -1,0 +1,22 @@
+{
+  "name": "superpowers-enhanced",
+  "description": "Enhanced fork of Superpowers: planning, TDD, debugging, documentation persistence, and requirement decomposition workflows.",
+  "interface": {
+    "displayName": "Superpowers Enhanced"
+  },
+  "plugins": [
+    {
+      "name": "superpowers",
+      "description": "Enhanced skills library: TDD, debugging, collaboration, documentation persistence, and requirement decomposition.",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Coding"
+    }
+  ]
+}

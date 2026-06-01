@@ -56,7 +56,7 @@ Ensure `~/.claude/plugins/installed_plugins.json` contains an entry like:
       {
         "scope": "user",
         "installPath": "/Users/<you>/.claude/plugins/cache/superpowers-enhanced/latest",
-        "version": "5.1.1",
+        "version": "5.2.0",
         "installedAt": "<CURRENT_TIMESTAMP>",
         "lastUpdated": "<CURRENT_TIMESTAMP>",
         "gitCommitSha": "<LATEST_COMMIT_SHA>"
@@ -127,7 +127,7 @@ If any of these fail, use the troubleshooting section below.
 In some setups, Claude may load from a versioned cache path such as:
 
 ```text
-~/.claude/plugins/cache/superpowers-enhanced/superpowers/5.1.1
+~/.claude/plugins/cache/superpowers-enhanced/superpowers/5.2.0
 ```
 
 while another manually maintained path such as `latest/` also exists.

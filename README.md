@@ -84,25 +84,37 @@ If you want the original version without enhanced skills, use the official marke
 
 ### Codex CLI
 
-- Open the plugin search interface:
+- Register this repository as a marketplace:
+
+  ```bash
+  codex plugin marketplace add LZY-Ricardo/superpowers-enhanced
+  ```
+
+- Install the plugin:
+
+  ```bash
+  codex plugin install superpowers@superpowers-enhanced
+  ```
+
+- Or use the plugin browser:
 
   ```bash
   /plugins
   ```
 
-- Search for Superpowers:
-
-  ```bash
-  superpowers
-  ```
-
-- Select `Install Plugin`.
+  Switch to the **Superpowers Enhanced** marketplace tab, then select `Install Plugin`.
 
 ### Codex App
 
-- In the Codex app, click on Plugins in the sidebar.
-- You should see `Superpowers` in the Coding section.
-- Click the `+` next to Superpowers and follow the prompts.
+- Register the marketplace from a terminal:
+
+  ```bash
+  codex plugin marketplace add LZY-Ricardo/superpowers-enhanced
+  ```
+
+- In the Codex app, click on **Plugins** in the sidebar.
+- Find **Superpowers Enhanced** in your marketplace tab.
+- Click the `+` next to it and follow the prompts.
 
 ### Gemini CLI
 

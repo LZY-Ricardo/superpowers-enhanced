@@ -54,7 +54,7 @@ ln -s ~/.claude/plugins/cache/superpowers-enhanced/latest ~/.claude/plugins/mark
       {
         "scope": "user",
         "installPath": "/Users/<you>/.claude/plugins/cache/superpowers-enhanced/latest",
-        "version": "5.1.1",
+        "version": "5.2.0",
         "installedAt": "<CURRENT_TIMESTAMP>",
         "lastUpdated": "<CURRENT_TIMESTAMP>",
         "gitCommitSha": "<LATEST_COMMIT_SHA>"
@@ -123,7 +123,7 @@ git -C ~/.claude/plugins/cache/superpowers-enhanced/latest rev-parse HEAD
 有些环境里，Claude 可能会从这种版本化路径加载：
 
 ```text
-~/.claude/plugins/cache/superpowers-enhanced/superpowers/5.1.1
+~/.claude/plugins/cache/superpowers-enhanced/superpowers/5.2.0
 ```
 
 而不是你手动维护的：
