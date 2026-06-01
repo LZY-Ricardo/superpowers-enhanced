@@ -67,13 +67,25 @@ Install this enhanced version from the fork repository. Installation differs by 
 
 ### Claude Code
 
-Use the manual installation path described in [GETTING-STARTED.md](GETTING-STARTED.md).
+- Register the marketplace:
 
-At a high level:
-- clone this repository into Claude's plugin cache
-- register the plugin in `installed_plugins.json`
-- ensure it is enabled in `settings.json`
-- restart Claude Code and verify the enhanced skills load
+  ```text
+  /plugin marketplace add LZY-Ricardo/superpowers-enhanced
+  ```
+
+- Install the plugin:
+
+  ```text
+  /plugin install superpowers@superpowers-enhanced
+  ```
+
+- Reload plugins:
+
+  ```text
+  /reload-plugins
+  ```
+
+If `/plugin` commands don't work in your environment, see the [manual install fallback](GETTING-STARTED.md#10-manual-install-fallback-for-claude-code) in GETTING-STARTED.md.
 
 <details>
 <summary>Original Superpowers marketplace (without enhanced skills)</summary>

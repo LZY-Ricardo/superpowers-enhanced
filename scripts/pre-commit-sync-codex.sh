@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 
 # Check if any source files that affect the Codex plugin copy have changed
 CHANGED=$(git diff --cached --name-only -- \
