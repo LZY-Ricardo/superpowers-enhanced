@@ -93,7 +93,7 @@ If you want the original version without enhanced skills, use the official marke
 - Install the plugin:
 
   ```bash
-  codex plugin install superpowers@superpowers-enhanced
+  codex plugin add superpowers@superpowers-enhanced
   ```
 
 - Or use the plugin browser:
