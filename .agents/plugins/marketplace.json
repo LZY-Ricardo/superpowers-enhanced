@@ -8,10 +8,7 @@
     {
       "name": "superpowers",
       "description": "Enhanced skills library: TDD, debugging, collaboration, documentation persistence, and requirement decomposition.",
-      "source": {
-        "source": "local",
-        "path": "./"
-      },
+      "source": "./",
       "policy": {
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
