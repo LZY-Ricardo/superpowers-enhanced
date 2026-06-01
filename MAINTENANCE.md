@@ -270,6 +270,40 @@ The repository's enhanced skill counts and tables include only repo-shipped work
 
 ---
 
+## Release Versioning / 发布版本号
+
+Claude Code and Codex both install this plugin into versioned cache paths, for example:
+
+Claude Code 和 Codex 都会把插件安装到带版本号的缓存路径，例如：
+
+```text
+~/.claude/plugins/cache/superpowers-enhanced/superpowers/5.2.1
+~/.codex/plugins/cache/superpowers-enhanced/superpowers/5.2.1
+```
+
+For any user-visible release, bump the version in all plugin manifests before pushing. If the version does not change, users may keep loading the previous cache even after reinstalling.
+
+对任何对外可见的发布，都要先提升所有插件 manifest 的版本号再推送。如果版本号不变，用户即使重新安装也可能继续加载旧缓存。
+
+Update these files together:
+
+这些文件需要一起更新：
+
+- `package.json`
+- `.claude-plugin/plugin.json`
+- `.claude-plugin/marketplace.json`
+- `.codex-plugin/plugin.json`
+- `.cursor-plugin/plugin.json`
+- `gemini-extension.json`
+- `workflow-template-version.json`
+- `docs/superpowers/version.json` if this repository's own workflow guidance is being upgraded
+
+Then run the Codex sync step below before committing.
+
+然后在提交前运行下方的 Codex 同步步骤。
+
+---
+
 ## Codex Plugin Sync / Codex 插件同步
 
 The `plugins/superpowers/` directory contains a **file copy** of the plugin for Codex marketplace discovery. Codex does not follow symlinks, so actual files are required.
