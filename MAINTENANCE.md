@@ -101,6 +101,7 @@ Templates are copied to target projects by `init-enhanced-workflow`.
 - [ ] If skill creates docs, add its directory to `init-enhanced-workflow/SKILL.md`
 - [ ] If skill has templates, add copy command to `init-enhanced-workflow/SKILL.md`
 - [ ] If skill changes the workflow, update `using-enhanced-workflow/SKILL.md` flow diagram
+- [ ] Run `./scripts/sync-codex-plugin.sh` and commit the updated `plugins/superpowers/` copy (or rely on the pre-commit hook)
 
 ### Step 5: Test
 
@@ -269,6 +270,47 @@ The repository's enhanced skill counts and tables include only repo-shipped work
 
 ---
 
+## Codex Plugin Sync / Codex 插件同步
+
+The `plugins/superpowers/` directory contains a **file copy** of the plugin for Codex marketplace discovery. Codex does not follow symlinks, so actual files are required.
+
+`plugins/superpowers/` 目录包含用于 Codex marketplace 发现的插件**文件副本**。Codex 不支持符号链接，必须使用实际文件。
+
+### Syncing / 同步
+
+After changing any file under `skills/`, `hooks/`, `.codex-plugin/`, `assets/`, `README.md`, or `LICENSE`, sync the Codex copy:
+
+修改 `skills/`、`hooks/`、`.codex-plugin/`、`assets/`、`README.md` 或 `LICENSE` 下的文件后，同步 Codex 副本：
+
+```bash
+./scripts/sync-codex-plugin.sh
+git add plugins/superpowers/
+git commit -m "chore: sync codex plugin"
+```
+
+### Pre-commit Hook / Pre-commit 钩子
+
+A pre-commit hook can automate this. It detects changes to source files and runs the sync script before each commit:
+
+pre-commit 钩子可以自动化此流程。它检测源文件变更并在每次提交前运行同步脚本：
+
+```bash
+# Install / 安装
+cp scripts/pre-commit-sync-codex.sh .git/hooks/pre-commit
+```
+
+When the hook is installed, you do not need to run `sync-codex-plugin.sh` manually. It triggers automatically on `git commit` when relevant files have changed.
+
+钩子安装后无需手动运行 `sync-codex-plugin.sh`。当相关文件有变更时，它会在 `git commit` 时自动触发。
+
+### Why a Copy / 为什么是副本
+
+The upstream `obra/superpowers` uses a separate marketplace repo (`prime-radiant-inc/openai-codex-plugins`) and a sync script to publish to Codex. This fork takes a simpler approach: the plugin copy lives in the same repo under `plugins/superpowers/`. The trade-off is that the copy must be kept in sync manually or via the pre-commit hook.
+
+上游 `obra/superpowers` 使用独立的 marketplace 仓库（`prime-radiant-inc/openai-codex-plugins`）和同步脚本发布到 Codex。本 fork 采用更简单的方式：插件副本存放在同一仓库的 `plugins/superpowers/` 下。代价是需要手动或通过 pre-commit 钩子保持同步。
+
+---
+
 ## File Reference / 文件参考
 
 | File | Purpose |
@@ -280,3 +322,8 @@ The repository's enhanced skill counts and tables include only repo-shipped work
 | `README.md` | Project overview (original + fork description) |
 | `skills/*/SKILL.md` | Individual skill definitions |
 | `skills/using-enhanced-workflow/docs-*-template.md` | Documentation templates for projects |
+| `.agents/plugins/marketplace.json` | Codex marketplace catalog |
+| `.codex-plugin/plugin.json` | Codex plugin manifest |
+| `plugins/superpowers/` | Codex plugin file copy (synced from root) |
+| `scripts/sync-codex-plugin.sh` | Sync root files → Codex plugin copy |
+| `scripts/pre-commit-sync-codex.sh` | Pre-commit hook for auto-sync |

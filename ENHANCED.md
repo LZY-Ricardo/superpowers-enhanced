@@ -163,9 +163,18 @@ Final handoff document: spec vs. reality, known issues, deferred items, files ch
 
 ### As a Claude Code Plugin / 作为 Claude Code 插件
 
+See [GETTING-STARTED.md](GETTING-STARTED.md) (English) or [GETTING-STARTED.zh-CN.md](GETTING-STARTED.zh-CN.md) (中文) for the step-by-step manual installation guide.
+
+参阅 [GETTING-STARTED.md](GETTING-STARTED.md)（英文）或 [GETTING-STARTED.zh-CN.md](GETTING-STARTED.zh-CN.md)（中文）获取详细的手动安装步骤。
+
+### As a Codex CLI / App Plugin / 作为 Codex CLI / App 插件
+
 ```bash
-# Install from this repository / 从本仓库安装
-claude plugin add --url https://github.com/LZY-Ricardo/superpowers-enhanced.git
+# Register marketplace / 注册 marketplace
+codex plugin marketplace add LZY-Ricardo/superpowers-enhanced
+
+# Install plugin / 安装插件
+codex plugin add superpowers@superpowers-enhanced
 ```
 
 ### First-Time Setup in a Project / 项目首次设置

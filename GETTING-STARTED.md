@@ -92,6 +92,33 @@ If `enabledPlugins` already contains other entries, add `superpowers@superpowers
 
 Completely restart Claude Code and open a fresh session.
 
+## 1b. Install the plugin (Codex CLI / App)
+
+This is the recommended path for Codex users.
+
+### Step 1: Register the marketplace
+
+```bash
+codex plugin marketplace add LZY-Ricardo/superpowers-enhanced
+```
+
+### Step 2: Install the plugin
+
+```bash
+codex plugin add superpowers@superpowers-enhanced
+```
+
+Or use the interactive plugin browser: type `/plugins`, switch to the **Superpowers Enhanced** marketplace tab, and select `Install Plugin`.
+
+### Step 3 (Codex App only): Install from the sidebar
+
+If you prefer the Codex App UI:
+
+1. Run `codex plugin marketplace add LZY-Ricardo/superpowers-enhanced` from a terminal.
+2. In the Codex app, click **Plugins** in the sidebar.
+3. Find **Superpowers Enhanced** in your marketplace tab.
+4. Click the `+` next to it and follow the prompts.
+
 ## 2. Verify the plugin loaded
 
 A quick check:

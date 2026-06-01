@@ -88,6 +88,33 @@ git -C ~/.claude/plugins/cache/superpowers-enhanced/latest rev-parse HEAD
 
 彻底退出并重新打开 Claude Code，然后开启一个新会话。
 
+## 1b. 安装插件（Codex CLI / App 方式）
+
+Codex 用户推荐使用此方式。
+
+### 第一步：注册 marketplace
+
+```bash
+codex plugin marketplace add LZY-Ricardo/superpowers-enhanced
+```
+
+### 第二步：安装插件
+
+```bash
+codex plugin add superpowers@superpowers-enhanced
+```
+
+也可以用交互式插件浏览器：输入 `/plugins`，切换到 **Superpowers Enhanced** marketplace 标签页，选择 `Install Plugin`。
+
+### 第三步（仅 Codex App）：从侧边栏安装
+
+如果你更喜欢 Codex App 的图形界面：
+
+1. 在终端运行 `codex plugin marketplace add LZY-Ricardo/superpowers-enhanced`。
+2. 在 Codex App 中，点击侧边栏的 **Plugins**。
+3. 在你的 marketplace 标签页找到 **Superpowers Enhanced**。
+4. 点击 `+` 按钮并按照提示操作。
+
 ## 2. 验证插件是否加载成功
 
 可以先执行：
