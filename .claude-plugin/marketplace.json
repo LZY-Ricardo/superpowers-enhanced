@@ -1,18 +1,17 @@
 {
-  "name": "superpowers-dev",
-  "description": "Development marketplace for Superpowers core skills library",
+  "name": "superpowers-enhanced",
+  "description": "Enhanced fork of Superpowers: planning, TDD, debugging, documentation persistence, and requirement decomposition",
   "owner": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "LZY-Ricardo"
   },
   "plugins": [
     {
       "name": "superpowers",
-      "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
+      "description": "Enhanced skills library: TDD, debugging, collaboration, documentation persistence, and requirement decomposition",
       "version": "5.2.0",
       "source": "./",
       "author": {
-        "name": "Jesse Vincent",
+        "name": "Jesse Vincent (enhanced by LZY-Ricardo)",
         "email": "jesse@fsck.com"
       }
     }
