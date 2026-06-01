@@ -8,7 +8,7 @@
     {
       "name": "superpowers",
       "description": "Enhanced skills library: TDD, debugging, collaboration, documentation persistence, and requirement decomposition",
-      "version": "5.2.1",
+      "version": "5.2.2",
       "source": "./",
       "author": {
         "name": "Jesse Vincent (enhanced by LZY-Ricardo)",

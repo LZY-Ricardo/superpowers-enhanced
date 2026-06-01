@@ -154,28 +154,34 @@ Claude 应该先触发需求拆分，再按子项目逐个推进。
 这个插件使用版本号。Claude Code 和 Codex 都会安装到带版本号的缓存路径，例如：
 
 ```text
-~/.claude/plugins/cache/superpowers-enhanced/superpowers/5.2.1
-~/.codex/plugins/cache/superpowers-enhanced/superpowers/5.2.1
+~/.claude/plugins/cache/superpowers-enhanced/superpowers/5.2.2
+~/.codex/plugins/cache/superpowers-enhanced/superpowers/5.2.2
 ```
 
 当发布新版本时，维护者应该提升版本号。如果版本号不变，本地工具可能继续使用旧缓存。
 
 ### Claude Code
 
-推荐更新流程：
+推荐命令行更新流程：
 
 ```text
-/plugin uninstall superpowers@superpowers-enhanced
-/plugin marketplace add LZY-Ricardo/superpowers-enhanced
-/plugin install superpowers@superpowers-enhanced
+/plugin marketplace update superpowers-enhanced
+/plugin update superpowers@superpowers-enhanced
 /reload-plugins
 ```
 
-如果 marketplace 刷新异常，可以先移除再重新添加：
+也可以从图形界面更新：
+
+1. 打开 `/plugins`
+2. 进入 **Installed**
+3. 选择 `superpowers @ superpowers-enhanced`
+4. 选择 **Update now**
+5. 运行 `/reload-plugins`
+
+如果直接更新异常，再退回到卸载 + 安装：
 
 ```text
-/plugin marketplace remove superpowers-enhanced
-/plugin marketplace add LZY-Ricardo/superpowers-enhanced
+/plugin uninstall superpowers@superpowers-enhanced
 /plugin install superpowers@superpowers-enhanced
 /reload-plugins
 ```
@@ -186,9 +192,10 @@ Claude 应该先触发需求拆分，再按子项目逐个推进。
 
 ```bash
 codex plugin marketplace upgrade superpowers-enhanced
-codex plugin remove superpowers@superpowers-enhanced
 codex plugin add superpowers@superpowers-enhanced
 ```
+
+这个流程已经实测可以把安装缓存更新到新版本，无需先 remove 插件。
 
 如果 Codex 仍然加载旧文件，清理插件缓存后重新安装：
 
@@ -269,7 +276,7 @@ ln -s ~/.claude/plugins/cache/superpowers-enhanced/latest ~/.claude/plugins/mark
     {
       "scope": "user",
       "installPath": "/Users/<你>/.claude/plugins/cache/superpowers-enhanced/latest",
-      "version": "5.2.1",
+      "version": "5.2.2",
       "installedAt": "<当前时间戳>",
       "lastUpdated": "<当前时间戳>",
       "gitCommitSha": "<最新 commit SHA>"

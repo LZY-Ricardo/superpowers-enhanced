@@ -154,28 +154,34 @@ Do **not** overwrite historical records such as:
 This plugin is versioned. Claude Code and Codex both install into versioned cache paths such as:
 
 ```text
-~/.claude/plugins/cache/superpowers-enhanced/superpowers/5.2.1
-~/.codex/plugins/cache/superpowers-enhanced/superpowers/5.2.1
+~/.claude/plugins/cache/superpowers-enhanced/superpowers/5.2.2
+~/.codex/plugins/cache/superpowers-enhanced/superpowers/5.2.2
 ```
 
 When a new release is published, the maintainer should bump the version number. If the version does not change, your local tool may keep using the previous cache.
 
 ### Claude Code
 
-Recommended update flow:
+Recommended command-line update flow:
 
 ```text
-/plugin uninstall superpowers@superpowers-enhanced
-/plugin marketplace add LZY-Ricardo/superpowers-enhanced
-/plugin install superpowers@superpowers-enhanced
+/plugin marketplace update superpowers-enhanced
+/plugin update superpowers@superpowers-enhanced
 /reload-plugins
 ```
 
-If marketplace refresh behaves strangely, remove and re-add the marketplace first:
+You can also update from the UI:
+
+1. Open `/plugins`
+2. Go to **Installed**
+3. Select `superpowers @ superpowers-enhanced`
+4. Choose **Update now**
+5. Run `/reload-plugins`
+
+If direct update behaves strangely, fall back to uninstall + install:
 
 ```text
-/plugin marketplace remove superpowers-enhanced
-/plugin marketplace add LZY-Ricardo/superpowers-enhanced
+/plugin uninstall superpowers@superpowers-enhanced
 /plugin install superpowers@superpowers-enhanced
 /reload-plugins
 ```
@@ -186,9 +192,10 @@ Recommended update flow:
 
 ```bash
 codex plugin marketplace upgrade superpowers-enhanced
-codex plugin remove superpowers@superpowers-enhanced
 codex plugin add superpowers@superpowers-enhanced
 ```
+
+This was verified to update the installed cache to a newer version without first removing the plugin.
 
 If Codex still loads old files, clear the plugin cache and re-install:
 
@@ -272,7 +279,7 @@ Add to `~/.claude/plugins/installed_plugins.json`:
     {
       "scope": "user",
       "installPath": "/Users/<you>/.claude/plugins/cache/superpowers-enhanced/latest",
-      "version": "5.2.1",
+      "version": "5.2.2",
       "installedAt": "<CURRENT_TIMESTAMP>",
       "lastUpdated": "<CURRENT_TIMESTAMP>",
       "gitCommitSha": "<LATEST_COMMIT_SHA>"

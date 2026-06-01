@@ -277,8 +277,8 @@ Claude Code and Codex both install this plugin into versioned cache paths, for e
 Claude Code 和 Codex 都会把插件安装到带版本号的缓存路径，例如：
 
 ```text
-~/.claude/plugins/cache/superpowers-enhanced/superpowers/5.2.1
-~/.codex/plugins/cache/superpowers-enhanced/superpowers/5.2.1
+~/.claude/plugins/cache/superpowers-enhanced/superpowers/5.2.2
+~/.codex/plugins/cache/superpowers-enhanced/superpowers/5.2.2
 ```
 
 For any user-visible release, bump the version in all plugin manifests before pushing. If the version does not change, users may keep loading the previous cache even after reinstalling.

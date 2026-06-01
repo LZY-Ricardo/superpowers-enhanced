@@ -1,7 +1,7 @@
 {
   "name": "superpowers",
   "description": "Enhanced skills library for Claude Code: TDD, debugging, collaboration, documentation persistence, and requirement decomposition",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "author": {
     "name": "Jesse Vincent (enhanced by LZY-Ricardo)",
     "email": "jesse@fsck.com"
