@@ -131,14 +131,14 @@ Expected: concrete pass result
 
 - [ ] **Step 5: Run self-checklist**
 
-Produce `✅` / `❌` / `N/A` plus a one-line note for every item below. If ANY item is `❌`, stop here, write a debugging-log entry (or inline note when the issue is small), and report to the human partner before continuing. Do not advance to Step 6 while an unresolved `❌` exists.
+Run the action defined for each item in `documenting-execution`'s **Self-Checklist Definitions** section and produce its evidence. For every item below, write `✅` / `❌` / `N/A` with an evidence link. If ANY item is `❌`, stop here, write a debugging-log entry (or inline note when the issue is small), and report to the human partner per hard rule 1. Do not advance to Step 6 while an unresolved `❌` exists. Any plan deviation on the deviation-check item is `❌` and triggers escalation per hard rule 2.
 
-- [ ] Spec mapping —
-- [ ] Interface consistency —
-- [ ] Tests verify behavior —
-- [ ] Smell scan —
-- [ ] Spec-stated boundaries covered —
-- [ ] Plan deviation check —
+- [ ] Spec mapping — [evidence link]
+- [ ] Interface consistency — [evidence link]
+- [ ] Tests verify behavior — [evidence link]
+- [ ] Smell scan — [evidence link]
+- [ ] Spec-stated boundaries covered — [evidence link]
+- [ ] Plan deviation check — [evidence link]
 
 - [ ] **Step 6: Write the merged execution-log block**
 
@@ -281,6 +281,7 @@ Reply with your choice, or "use default".
 - plan deviation triggers one escalation review regardless of task-level setting
 - feature-level review must keep at least one review dimension enabled
 - TDD failing-test step cannot be skipped
+- projects may append project-level hard rules in the "Project-specific add-ons" section of `review-config.md` (restrict to project-specific constraints)
 
 **Which execution mode and review strategy do you want?"**
 

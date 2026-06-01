@@ -91,8 +91,53 @@ The default enhanced workflow writes **one merged block per task**. Do not split
 **Debugging**
 - `N/A`, inline note, or link to standalone debugging-log entry
 
+**Carryover** *(optional; fill only when intentional interim state is left)*
+- Interim state left behind: [specific behavior / placeholder implementation / temporary variable]
+- Subsequent task that will close it out: Task N
+- Why not closed now: [ordering rationale; "I didn't feel like it" is not acceptable]
+
 ---
 ```
+
+**Carryover and Smell #7 (Implicit contract) — how they relate:**
+- Carryover field filled in → the contract is made explicit → Smell #7 does not trigger
+- Carryover not filled but code still has a placeholder → Smell #7 triggers as unhandled → ❌
+
+## Self-Checklist Definitions
+
+Each Step 5 self-checklist item must produce **action + evidence + a binary pass/fail call**. Writing only `✅` without evidence is not a valid checklist outcome.
+
+| # | Item | Action | Evidence | Pass / Fail / N/A |
+|---|---|---|---|---|
+| 1 | **Spec mapping** | For each scope point in the task, locate the matching spec §X.Y | List of `scope point → §X.Y → one-line quote` | All mapped → ✅; any unmapped → ❌; pure refactor with no spec → N/A (requires human partner sign-off, recorded in log) |
+| 2 | **Interface consistency** | For each new or changed signature / prop / type, grep call sites and verify they match | List of `signature → call-site grep results` | All match → ✅; any mismatch → ❌; task does not touch any public interface (e.g., pure CSS) → N/A with justification |
+| 3 | **Tests verify behavior** | For the failing test from Step 1, name the spec behavior it asserts and the pre-implementation failure reason | One line: `test name → spec behavior → pre-impl failure reason` | Both present → ✅; spec explicitly waives tests for this work → N/A with spec §X.Y citation |
+| 4 | **Smell scan** | Walk the fixed 8-item smell checklist below, mark each item | 8 bullets: `not triggered / triggered & handled / triggered & unhandled` | All not-triggered or handled → ✅; any unhandled → ❌; N/A not allowed |
+| 5 | **Spec-stated boundaries covered** | List spec's "Out of scope" items and "Acceptance criteria" boundaries; verify each one | Two lists: out-of-scope vs respected; acceptance boundary vs respected | All respected → ✅; any crossed → ❌; N/A not allowed |
+| 6 | **Plan deviation check** (**binary**) | `git diff` vs the plan's task description. **Any code change outside the plan's described scope is a DEVIATION**. Rationalizations like "equivalent", "lint requires it", "behaviorally identical" are NOT valid grounds for ✅ | `no deviation` line OR `deviation list: file + line range + one-line reason` | No deviation → ✅; any deviation → ❌, **escalation required** (mark in log; trigger one review per review-config regardless of task-level setting); N/A not allowed; "but it's equivalent" not allowed |
+
+### Smell Scan Checklist (fixed 8 items, language-agnostic)
+
+1. Type / signature escape hatches (`any`, untyped exceptions, `as unknown`)
+2. Debug residue (`console.*`, `debugger`, commented-out code blocks)
+3. Async path three-branch coverage (success / failure / cleanup all handled)
+4. Resource lifecycle (timer / listener / ref / subscription cleaned up where appropriate)
+5. Boundary inputs (null / 0 / empty collection / negative / oversized)
+6. Concurrency / race conditions (multiple entry points to shared state, stale callbacks overwriting newer values)
+7. **Implicit contract** (you assume a consumer / selector / regex will not match certain things, but no structural guarantee enforces it)
+8. Magic literals (unnamed constants, repeated thresholds, untyped string enums)
+
+### Smell #7 anchor examples (to prevent semantic drift)
+
+**Triggers**:
+- Focus trap sentinel `<span tabIndex={0}>` combined with selector `[tabindex]:not([tabindex="-1"])`: the code assumes the selector will not match the sentinel, but it does
+- Regex `/^https?:/` assumed not to match `httpsfoo://` (if the business later allows new schemes): the future scheme list is an implicit contract
+- Prop-name convention (e.g., a React upload component assuming the parent passes `onUpload`) not enforced in a TS type: the contract lives only in documentation
+
+**Does not trigger**:
+- Using `Array.isArray(x)` to guard non-arrays: the contract is enforced in code
+- Using an enum to constrain a status field: the contract lives in the type
+- Throwing a typed exception that consumers must catch: the contract is carried by the type
 
 ## What Belongs Here vs Elsewhere
 
@@ -112,7 +157,7 @@ This means self-review checklist output stays in the execution log by default an
 
 ## Key Principles
 
-- **Append only** — never edit past task blocks
+- **Append only at EOF, in temporal order** — every task block must be appended to the end of the file, ordered by completion time. Forbidden: (a) inserting new blocks into the middle of the file; (b) reordering existing blocks (even to "match task #" order). Readers trace through the timeline, not by task number; task # order is provided by the plan index, not by log file order
 - **One merged block per task** — default path for the lightweight workflow
 - **Record why, not just what** — the reason behind a deviation matters more than the deviation itself
 - **List the actual verification evidence** — pass/fail is not assumed
@@ -128,4 +173,5 @@ This means self-review checklist output stays in the execution log by default an
 | "Self-review belongs in review-log" | No. Self-review checklist stays in the execution log by default. |
 | "I'll skip the explicit Step 5 and just fill the checklist section in the log" | No. Step 5 is an executable task step with a stop-on-`❌` rule. The log section only records what Step 5 already produced. |
 | "I need a separate documenting skill call for every task sub-step" | No. The lightweight default uses one execution-log block per task. |
+| "Task N block ended up before Task M, let me swap them to match task # order" | Don't swap. The execution-log is a timeline ordered by completion time. Task # order is available in the plan. |
 

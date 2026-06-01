@@ -207,6 +207,8 @@ It should define:
 
 Every task starts by reading this file. Every task's execution-log block records how the config was applied.
 
+**Template:** Copy `~/.claude/plugins/cache/superpowers-enhanced/latest/skills/using-enhanced-workflow/docs-superpowers-review-config-template.md` to the target path and fill in each `{{placeholder}}` with the project's actual values. Keep the Hard rules section as-is; append project-level rules only in the Project-specific add-ons section.
+
 ## Resuming Mid-Project
 
 When joining a project that already has Superpowers docs:
