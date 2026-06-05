@@ -107,29 +107,37 @@ Before proposing changes to skill design, workflow philosophy, or architecture, 
 
 ---
 
-## Enhanced Workflow Skills
-
-This fork adds documentation and requirement decomposition skills on top of the core Superpowers workflow. These skills ensure every development phase produces persistent documentation.
+## Skills
 
 ### Local Maintenance Skills vs Repo Workflow Skills
 
-Local maintenance skills (install/update/uninstall/migration/personal operational helpers) do not belong in this repository by default. They should live in `~/.claude/skills/` unless they directly support the shared Enhanced Superpowers project workflow used inside ordinary repos.
+Local maintenance skills (install/update/uninstall/migration/personal operational helpers) do not belong in this repository by default. They should live in `~/.claude/skills/` unless they directly support the shared workflow used inside ordinary repos.
 
-Do not count local maintenance skills as part of the repository's enhanced skill inventory.
+Do not count local maintenance skills as part of the repository's skill inventory.
 
-### Enhanced Skills (8 new)
+### Workflow Skills (22)
 
 | Skill | Purpose |
 |-------|---------|
+| `brainstorming` | Socratic design refinement before writing code |
 | `decomposing-requirements` | Break large requirements into sub-projects before brainstorming |
-| `init-enhanced-workflow` | One-time project setup: directory structure + CLAUDE.md + docs |
-| `using-enhanced-workflow` | Master flow reference: complete phase map and skill chaining |
-| `documenting-execution` | Record task execution status, deviations, and decisions |
-| `documenting-verification` | Record verification results (tests, build, lint) |
-| `documenting-debugging` | Record debugging sessions: symptom → root cause → fix |
-| `documenting-review` | Record code review findings and resolutions |
+| `dispatching-parallel-agents` | Concurrent subagent workflows |
 | `documenting-completion` | Write final completion summary before merge/PR |
-
-### Original Skills (14 from upstream)
-
-brainstorming, dispatching-parallel-agents, executing-plans, finishing-a-development-branch, receiving-code-review, requesting-code-review, subagent-driven-development, systematic-debugging, test-driven-development, using-git-worktrees, using-superpowers, verification-before-completion, writing-plans, writing-skills
+| `documenting-debugging` | Record debugging sessions: symptom → root cause → fix |
+| `documenting-execution` | Record task execution status, deviations, and decisions |
+| `documenting-review` | Record code review findings and resolutions |
+| `documenting-verification` | Record verification results (tests, build, lint) |
+| `executing-plans` | Batch execution with checkpoints |
+| `finishing-a-development-branch` | Merge/PR decision workflow |
+| `init-enhanced-workflow` | One-time project setup: directory structure + CLAUDE.md + docs |
+| `receiving-code-review` | Responding to review feedback |
+| `requesting-code-review` | Pre-review checklist |
+| `subagent-driven-development` | Fast iteration with two-stage review |
+| `systematic-debugging` | 4-phase root cause process |
+| `test-driven-development` | RED-GREEN-REFACTOR cycle |
+| `using-enhanced-workflow` | Master flow reference: complete phase map and skill chaining |
+| `using-git-worktrees` | Parallel development branches |
+| `using-superpowers` | Bootstrap: skill discovery and workflow routing |
+| `verification-before-completion` | Ensure it's actually fixed |
+| `writing-plans` | Detailed implementation plans |
+| `writing-skills` | Create new skills following best practices |

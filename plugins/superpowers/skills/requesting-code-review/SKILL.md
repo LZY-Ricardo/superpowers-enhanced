@@ -23,7 +23,6 @@ Dispatch a code reviewer subagent to catch issues before they cascade. The revie
 
 ## How to Request
 
-<!-- ENHANCED: reviewer-continuity-rules -->
 ## Reviewer Continuity
 
 On the first review cycle, record enough reviewer identity to attempt a targeted re-check later (for example: `spec-reviewer subagent #1`, `code-quality reviewer #2`). When a fix is ready:
@@ -33,7 +32,6 @@ On the first review cycle, record enough reviewer identity to attempt a targeted
 - Fresh reviewers must check both: whether prior findings are truly fixed, and whether the fix introduced regressions or new issues
 
 Reviewer continuity is preferred, not magical. If the runtime cannot continue the same reviewer instance, the fallback reviewer must be told that it is performing a re-check of prior findings, not a blind first-pass review.
-<!-- /ENHANCED: reviewer-continuity-rules -->
 
 **1. Get git SHAs:**
 ```bash

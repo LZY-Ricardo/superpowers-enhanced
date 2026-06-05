@@ -10,29 +10,35 @@ This document describes how to develop, maintain, and update this enhanced fork 
 
 ```
 skills/
-├── [Original Skills - 14 from upstream]    ← DO NOT modify unless necessary
-│   ├── brainstorming/
-│   ├── writing-plans/
-│   ├── executing-plans/
-│   └── ...
-│
-└── [Enhanced Skills - 8 added by us]       ← We own these, modify freely
-    ├── decomposing-requirements/
-    ├── documenting-execution/
-    ├── documenting-verification/
-    ├── documenting-debugging/
-    ├── documenting-review/
-    ├── documenting-completion/
-    ├── init-enhanced-workflow/
-    └── using-enhanced-workflow/
+├── brainstorming/
+├── decomposing-requirements/
+├── dispatching-parallel-agents/
+├── documenting-completion/
+├── documenting-debugging/
+├── documenting-execution/
+├── documenting-review/
+├── documenting-verification/
+├── executing-plans/
+├── finishing-a-development-branch/
+├── init-enhanced-workflow/
+├── receiving-code-review/
+├── requesting-code-review/
+├── subagent-driven-development/
+├── systematic-debugging/
+├── test-driven-development/
+├── using-enhanced-workflow/
+├── using-git-worktrees/
+├── using-superpowers/
+├── verification-before-completion/
+├── writing-plans/
+└── writing-skills/
 
-ENHANCED-CHANGES.md                         ← Registry of modifications to original skills
 MAINTENANCE.md                              ← THIS FILE
 ```
 
-**Principle / 原则:** Enhanced skills are additive. Original skills are modified only when necessary for integration.
+**Principle / 原则:** All skills belong to this project equally. Modify any skill as needed.
 
-**原则：** 增强技能是加法。原始技能仅在必要时为集成而修改。
+**原则：** 所有 skill 同属本项目，可按需修改任何一个。
 
 ---
 
@@ -96,7 +102,7 @@ Templates are copied to target projects by `init-enhanced-workflow`.
 
 ### Step 4: Update Related Files
 
-- [ ] Add skill to the table in `CLAUDE.md` (Enhanced Skills section)
+- [ ] Add skill to the table in `CLAUDE.md`
 - [ ] Add skill to the table in `ENHANCED.md` (if created)
 - [ ] If skill creates docs, add its directory to `init-enhanced-workflow/SKILL.md`
 - [ ] If skill has templates, add copy command to `init-enhanced-workflow/SKILL.md`
@@ -120,108 +126,13 @@ git commit -m "feat: add <skill-name> skill"
 
 ---
 
-## Modifying an Original Skill / 修改原始 Skill
+## Modifying a Skill / 修改 Skill
 
-**Only modify original skills when absolutely necessary for integration.** Before modifying, ask: can this be achieved by a new enhanced skill instead?
+When modifying an existing skill:
 
-**仅在绝对必要时才修改原始 skill。** 修改前先问：能否通过新增增强 skill 来实现？
-
-### Annotation Protocol / 标注协议
-
-When modifying an original skill, wrap ALL changes with markers:
-
-```markdown
-<!-- ENHANCED: <marker-id> -->
-[Your added content here]
-<!-- /ENHANCED: <marker-id> -->
-```
-
-**Marker naming rules / 标注命名规则:**
-- Format: `ENHANCED: <verb>-<noun>-<purpose>`
-- Example: `ENHANCED: added-enhanced-workflow-ref`
-- Unique per modification point — never reuse a marker ID
-- One marker per logical change — don't bundle multiple changes under one marker
-
-### Registration Flow / 登记流程
-
-After modifying an original skill, register the change in `ENHANCED-CHANGES.md`:
-
-```markdown
-### skills/<skill-name>/SKILL.md
-
-**Marker:** `ENHANCED: <marker-id>`
-**Location:** [where in the file, e.g., "After 'Skill Priority' section, ~line 45"]
-**Added content:**
-```
-[exact content between the markers]
-```
-**Reason:** [why this modification was needed]
-```
-
-### Verification / 验证
-
-After modification:
-1. Test the skill still works correctly
-2. Test the enhanced workflow still chains properly
-3. Verify the annotation markers are correctly placed
-4. Verify ENHANCED-CHANGES.md matches the actual file content
-
----
-
-## Upstream Sync Workflow / 上游同步流程
-
-When the original Superpowers repo has updates:
-
-### Step 1: Fetch and Review
-
-```bash
-# Fetch upstream changes
-git fetch upstream
-
-# Review what changed
-git log --oneline HEAD..upstream/main
-git diff HEAD..upstream/main --stat
-
-# Check if any modified files overlap with our changes
-git diff HEAD..upstream/main -- skills/using-superpowers/
-```
-
-### Step 2: Merge
-
-```bash
-git merge upstream/main
-```
-
-### Step 3: Handle Conflicts (if any)
-
-If conflicts occur:
-
-1. Open each conflicted file
-2. Look for `<!-- ENHANCED:` markers — our additions are clearly marked
-3. Resolve by keeping both: upstream's new content + our enhanced additions
-4. For each resolved conflict, verify against `ENHANCED-CHANGES.md`:
-   - Is every marker still present?
-   - Is the content between markers still correct?
-   - Does the marker ID match what's registered?
-
-### Step 4: Post-Merge Verification
-
-- [ ] All `<!-- ENHANCED:` markers still exist in modified files
-- [ ] ENHANCED-CHANGES.md entries match actual file content
-- [ ] Enhanced skills still load and trigger correctly
-- [ ] Original skills still work as expected
-- [ ] No merge artifacts (conflict markers `<<<<<<<`, `=======`, `>>>>>>>`) remain
-
-### Step 5: Update and Commit
-
-```bash
-# Update the sync date in ENHANCED-CHANGES.md
-# Change: Last synced with upstream: <old-date>
-# To:     Last synced with upstream: <today>
-
-git add .
-git commit -m "chore: sync with upstream superpowers (upstream <sha>)"
-```
+1. Test the skill still works correctly after changes
+2. Test the workflow still chains properly with adjacent skills
+3. Run `./scripts/sync-codex-plugin.sh` if the skill is under `skills/`
 
 ---
 
@@ -349,8 +260,7 @@ The upstream `obra/superpowers` uses a separate marketplace repo (`prime-radiant
 
 | File | Purpose |
 |------|---------|
-| `CLAUDE.md` | Contributor guidelines (original) + enhanced skills list (added) |
-| `ENHANCED-CHANGES.md` | Registry of all modifications to original skills |
+| `CLAUDE.md` | Contributor guidelines + skills list |
 | `MAINTENANCE.md` | THIS FILE — development and maintenance guide |
 | `ENHANCED.md` | Detailed description of the enhanced workflow (bilingual) |
 | `README.md` | Project overview (original + fork description) |

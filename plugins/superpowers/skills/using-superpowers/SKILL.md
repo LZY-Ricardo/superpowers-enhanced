@@ -104,18 +104,17 @@ When multiple skills could apply, use this order:
 "Let's build X" → brainstorming first, then implementation skills.
 "Fix this bug" → debugging first, then domain-specific skills.
 
-<!-- ENHANCED: added-enhanced-workflow-ref -->
-## Enhanced Workflow
+## Workflow Routing
 
-This fork includes enhanced skills that add documentation at every phase. Check for these skills:
+After checking for relevant skills, determine which workflow to follow:
 
-- **`using-enhanced-workflow`** — Master flow reference with complete phase map
-- **`init-enhanced-workflow`** — One-time project setup (run once per project)
-- **`decomposing-requirements`** — Break large requirements before brainstorming
-- **`documenting-*`** — Record execution, verification, debugging, review, and completion
+**IF** `docs/superpowers/` exists in the project:
+→ The enhanced workflow is active. Invoke `using-enhanced-workflow` as the master reference for all development phases. Do not also invoke this skill for workflow decisions.
 
-If this project has `docs/superpowers/` directory, the enhanced workflow is active. Follow `using-enhanced-workflow` for the complete flow.
-<!-- /ENHANCED: added-enhanced-workflow-ref -->
+**ELSE**:
+→ Use the standard Superpowers flow (brainstorming → planning → execution → review → finish).
+
+This routing decision is made once when starting development work. Do not re-check on every task.
 
 ## Skill Types
 
